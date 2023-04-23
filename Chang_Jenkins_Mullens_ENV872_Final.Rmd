@@ -1,17 +1,18 @@
 ---
-output:
-  pdf_document: default
-  html_document: default
----
-\newpage
----
-title: "ENV 872 Final Project"
-author: "Irene Chang, Susanna Jenkins, and Jordan Mullens"
-date: "Spring 2023"
-output: pdf_document
+output: 
+  pdf_document:
+    keep_tex: yes
+    fig_caption: yes
+    number_sections: yes
 geometry: margin=2.54cm
+title: "Insert title of project here"
+subtitle: "Web address for GitHub repository"
+author: "Irene Chang, Susanna Jenkins, and Jordan Mullens"
+fontsize: 12pt
+mainfont: Times New Roman
 
 ---
+
 \newpage
 \tableofcontents 
 \newpage
