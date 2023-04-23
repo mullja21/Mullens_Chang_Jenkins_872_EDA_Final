@@ -1,0 +1,124 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
+\newpage
+---
+title: "ENV 872 Final Project"
+author: "Irene Chang, Susanna Jenkins, and Jordan Mullens"
+date: "Spring 2023"
+output: pdf_document
+geometry: margin=2.54cm
+
+---
+\newpage
+\tableofcontents 
+\newpage
+\listoftables 
+\newpage
+\listoffigures 
+\newpage
+
+```{r setup, include=FALSE}
+# Set your working directory
+getwd()
+setwd("/home/guest/Mullens_Chang_Jenkins_Final")
+
+# Load your packages
+library(tidyverse)
+library(agricolae)
+library(ggplot2)
+library(lubridate)
+
+# Set your ggplot theme
+library(ggthemes)
+our_theme <- theme_base() +
+  theme(
+    line = element_line(
+      color= 'black',
+      linewidth = 2),
+    legend.background = element_rect(
+      color = "lightgrey",
+      fill = "lightgrey"),
+    legend.title = element_text (
+      color = "blue"))
+theme_set(our_theme)
+
+
+# Load your datasets
+RDD.raw <- read.csv("./Public_RDD_Spending_All_Countries.csv")
+
+
+```
+
+
+# Rationale and Research Questions
+
+
+
+\newpage
+
+# Dataset Information
+
+
+
+\newpage
+
+# Exploration of Raw Data 
+
+```{r dataset info}
+#checking the original data set dimensions before wrangling. View dimensions, cloumn names, variable type, and head of each column.
+
+dim(RDD.raw)
+summary(RDD.raw)
+
+
+```
+
+# Data Wrangling
+After the initial exploration, the dataset was wrangled to suit the analysis. The data frame was modified so that only the
+
+```{r dataset wrangling}
+#change column names, select 
+
+
+
+```
+
+
+\newpage
+
+# Analysis
+
+```{r}
+#Format as a t-test
+#EPAair$Ozone will be our continuous dependent variable
+#EPAair$Year will be our categorical variable with two levels (2018 and 2019)
+O3.twosample <- t.test(EPAair$Ozone ~ EPAair$Year)
+O3.twosample
+
+# Format as a GLM
+O3.twosample2 <- lm(EPAair$Ozone ~ EPAair$Year)
+summary(O3.twosample2)
+
+```
+
+
+
+## Question 1: <insert specific question here and add additional subsections for additional questions below, if needed>
+
+## Question 2: 
+
+
+
+
+\newpage
+
+# Summary and Conclusions
+
+
+\newpage
+
+# References
+<add references here if relevant, otherwise delete this section> 
