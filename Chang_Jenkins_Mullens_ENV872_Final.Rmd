@@ -6,7 +6,7 @@ output:
     number_sections: yes
 geometry: margin=2.54cm
 title: "Insert title of project here"
-subtitle: "Web address for GitHub repository"
+subtitle: "https://github.com/mullja21/Mullens_Chang_Jenkins_872_EDA_Final.git"
 author: "Irene Chang, Susanna Jenkins, and Jordan Mullens"
 fontsize: 12pt
 mainfont: Times New Roman
@@ -50,18 +50,17 @@ theme_set(our_theme)
 # Load your datasets
 RDD.raw <- read.csv("./Public_RDD_Spending_All_Countries.csv")
 
-
 ```
 
 
 # Rationale and Research Questions
-
+Question 1: Was public investment in lower carbon energy RD&D significant during the Obama administration?
 
 
 \newpage
 
 # Dataset Information
-
+The dataset utilized in this analysis were downloaded from International Energy Agency. The IEA's Energy Technology RD&D Budgets database provides spending information by energy technology in IEA countries from 1974 to 2022. Data is collected from central or federal government budgets and state-owned companies. Spending categories encompass renewables, nuclear power, fossil fuels, hydrogen, fuel cells, and energy efficiency.
 
 
 \newpage
@@ -78,10 +77,10 @@ summary(RDD.raw)
 ```
 
 # Data Wrangling
-After the initial exploration, the dataset was wrangled to suit the analysis. The data frame was modified so that only the
+Downloaded the Energy Technology RD&D Budgets. After importing the data to GitHub and Rstudio, the raw dataset was wrangled to suit our analysis. A new data frame was created by extracting the desired years (1985-2015), currency (USD 2021 prices and exchange rates), and economic indications (total, fossil fuels and unallocated) for each country. A variable for year over year percentage (YOY) difference was created to normalize all comparisons. 
 
 ```{r dataset wrangling}
-#change column names, select 
+#create new data frame, change column names
 
 
 
@@ -91,17 +90,11 @@ After the initial exploration, the dataset was wrangled to suit the analysis. Th
 \newpage
 
 # Analysis
+The analysis of this dataset focused on comparing the mean investment YOY difference of the Pre-Obama era and the mean investment YOY difference of the Obama era. However, we need to ensure any changes in investment is unique to the Obama administration and not occuring globally. Therefore, we will also utilize t-tests to compare US investments to Germany's within the same time period.
 
-```{r}
-#Format as a t-test
-#EPAair$Ozone will be our continuous dependent variable
-#EPAair$Year will be our categorical variable with two levels (2018 and 2019)
-O3.twosample <- t.test(EPAair$Ozone ~ EPAair$Year)
-O3.twosample
 
-# Format as a GLM
-O3.twosample2 <- lm(EPAair$Ozone ~ EPAair$Year)
-summary(O3.twosample2)
+```{r conducting 3 ttests}
+
 
 ```
 
