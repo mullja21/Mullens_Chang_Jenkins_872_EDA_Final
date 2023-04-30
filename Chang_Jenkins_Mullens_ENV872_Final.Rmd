@@ -26,11 +26,15 @@ mainfont: Times New Roman
 getwd()
 setwd("/home/guest/Mullens_Chang_Jenkins_Final")
 
+#install package
+#install.packages("janitor")
+
 # Load your packages
 library(tidyverse)
 library(agricolae)
 library(ggplot2)
 library(lubridate)
+library(janitor)
 
 # Set your ggplot theme
 library(ggthemes)
@@ -81,8 +85,56 @@ Downloaded the Energy Technology RD&D Budgets. After importing the data to GitHu
 
 ```{r dataset wrangling}
 #create new data frame, change column names
+RDD.newcolnames <- RDD.raw %>%
+  row_to_names(row_number = 1)
+
+#the column names were imported improperly. The first row contains the correct column names, so we used the janitor package since they have a function that will replace the column names with the first row.
+
+ 
+
+RDD.countries <-
+  filter(RDD.newcolnames,
+         Country == "Germany" | Country == "United States",
+         Currency == "USD (2021 prices and exchange rates)") %>%
+  rename("Economic.Indicators" = "Economic Indicators")
 
 
+RDD.final <- RDD.countries %>%
+  filter(Economic.Indicators == "Total Budget" | Economic.Indicators == "Unallocated " | Economic.Indicators == "Fossil fuels") %>%
+  select("Country", "Currency", "Economic.Indicators", "1985", "1986", "1987", "1988", "1989", "1990", "1991", "1992", "1993", "1994", "1995", "1996", "1997", "1998", "1999", "2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015")
+
+RDD.transpose <- data.frame(t(RDD.final))
+
+#In our final data frame, we want each year to have its own row but in the original dataset that we had, each year was a column. We transposed it.
+
+colnames(RDD.transpose) <- c("Germany.FossilFuels", "Germany.Unallocated", "Germany.TotalBudget", "US.FossilFuels", "US.Unallocated", "US.TotalBudget")
+
+RDD.transpose.rows <- RDD.transpose[!(row.names(RDD.transpose) %in% c("Country", "Currency", "Economic.Indicators")),]
+
+ 
+RDD.transpose.rows <- RDD.transpose.rows %>%
+  mutate_at(1:6, as.numeric)
+
+#creating frame for US Data
+RDD.US <- data.frame(Year=c("1985", "1986", "1987", "1988", "1989", "1990", "1991", "1992", "1993", "1994", "1995", "1996", "1997", "1998", "1999", "2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015"), 
+                     Fossil.Fuel= RDD.transpose.rows$US.FossilFuels,
+                     Unallocated= RDD.transpose.rows$US.Unallocated,
+                     Total.Budget= RDD.transpose.rows$US.TotalBudget) %>%
+  mutate(Low.Carbon.Energy = Total.Budget-Fossil.Fuel-Unallocated) %>%
+  mutate(Percent.Change = ((Low.Carbon.Energy -
+                              lag(Low.Carbon.Energy))/lag(Low.Carbon.Energy))*100) %>%
+  mutate(Country = "US")
+
+
+#creating frame for Germany Data
+RDD.Germany <- data.frame(Year=c("1985", "1986", "1987", "1988", "1989", "1990", "1991", "1992", "1993", "1994", "1995", "1996", "1997", "1998", "1999", "2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015"),
+                          Fossil.Fuel= RDD.transpose.rows$Germany.FossilFuels,
+                          Unallocated= RDD.transpose.rows$Germany.Unallocated,
+                          Total.Budget= RDD.transpose.rows$Germany.TotalBudget) %>%
+  mutate(Low.Carbon.Energy = Total.Budget-Fossil.Fuel-Unallocated) %>%
+  mutate(Percent.Change = ((Low.Carbon.Energy -
+                              lag(Low.Carbon.Energy))/lag(Low.Carbon.Energy))*100) %>%
+  mutate(Country = "Germany")
 
 ```
 
@@ -91,6 +143,30 @@ Downloaded the Energy Technology RD&D Budgets. After importing the data to GitHu
 
 # Analysis
 The analysis of this dataset focused on comparing the mean investment YOY difference of the Pre-Obama era and the mean investment YOY difference of the Obama era. However, we need to ensure any changes in investment is unique to the Obama administration and not occuring globally. Therefore, we will also utilize t-tests to compare US investments to Germany's within the same time period.
+
+```{r visualizing the data}
+US.and.Germany.RDD <- rbind(RDD.Germany, RDD.US)
+
+
+#plotting the data
+US.Germany.RDD.plot <- ggplot(US.and.Germany.RDD,
+    aes(x= Year,
+    y= Percent.Change, 
+    color= Country)) + 
+  geom_smooth() +
+  geom_point() +
+  labs(title = "Year over year percent \n change in low carbon RDD",
+       y="Year over year percent change",
+       x="Year") + 
+  our_theme +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+  
+print(US.Germany.RDD.plot)
+  
+
+```
+
+
 
 
 ```{r conducting 3 ttests}
