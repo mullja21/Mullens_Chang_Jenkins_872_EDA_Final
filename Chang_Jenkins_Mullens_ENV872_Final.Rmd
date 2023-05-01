@@ -26,6 +26,8 @@ mainfont: Times New Roman
 getwd()
 setwd("/home/guest/Mullens_Chang_Jenkins_Final")
 
+#HEY JORDAN!!!!! THIS IS A TEST!!!!! HOPEFULLY IT WORKS BC I DON'T REALLY UNDERSTAND ANY OF THIS :)
+
 #install package
 #install.packages("janitor")
 
