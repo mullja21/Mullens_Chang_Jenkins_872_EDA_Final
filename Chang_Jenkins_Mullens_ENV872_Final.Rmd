@@ -26,8 +26,6 @@ mainfont: Times New Roman
 getwd()
 setwd("/home/guest/Mullens_Chang_Jenkins_Final")
 
-#HEY JORDAN!!!!! THIS IS A TEST!!!!! HOPEFULLY IT WORKS BC I DON'T REALLY UNDERSTAND ANY OF THIS :)
-
 #install package
 #install.packages("janitor")
 
@@ -60,13 +58,19 @@ RDD.raw <- read.csv("./Public_RDD_Spending_All_Countries.csv")
 
 
 # Rationale and Research Questions
-Question 1: Was public investment in lower carbon energy RD&D significant during the Obama administration?
+Question 1: Was public investment in lower carbon energy RD&D significant during 
+the Obama administration?
 
 
 \newpage
 
 # Dataset Information
-The dataset utilized in this analysis were downloaded from International Energy Agency. The IEA's Energy Technology RD&D Budgets database provides spending information by energy technology in IEA countries from 1974 to 2022. Data is collected from central or federal government budgets and state-owned companies. Spending categories encompass renewables, nuclear power, fossil fuels, hydrogen, fuel cells, and energy efficiency.
+The dataset utilized in this analysis was downloaded from International Energy 
+Agency. The IEA's Energy Technology RD&D (Research, Development, & Demonstration) 
+Budgets database provides spending information by energy technology in IEA 
+countries from 1974 to 2022. Data is collected from central or federal government 
+budgets and state-owned companies. Spending categories encompass renewables, 
+nuclear power, fossil fuels, hydrogen, fuel cells, and energy efficiency.
 
 
 \newpage
@@ -74,7 +78,7 @@ The dataset utilized in this analysis were downloaded from International Energy 
 # Exploration of Raw Data 
 
 ```{r dataset info}
-#checking the original data set dimensions before wrangling. View dimensions, cloumn names, variable type, and head of each column.
+#checking the original data set dimensions before wrangling. View dimensions, column names, variable type, and head of each column.
 
 dim(RDD.raw)
 summary(RDD.raw)
@@ -83,16 +87,15 @@ summary(RDD.raw)
 ```
 
 # Data Wrangling
-Downloaded the Energy Technology RD&D Budgets. After importing the data to GitHub and Rstudio, the raw dataset was wrangled to suit our analysis. A new data frame was created by extracting the desired years (1985-2015), currency (USD 2021 prices and exchange rates), and economic indications (total, fossil fuels and unallocated) for each country. A variable for year over year percentage (YOY) difference was created to normalize all comparisons. 
+Downloaded the Energy Technology RD&D (Research, Development, & Demonstration) Budgets. After importing the data to GitHub and Rstudio, the raw dataset was wrangled to suit our analysis. A new data frame was created by extracting the desired years (1985-2015), currency (USD 2021 prices and exchange rates), and economic indications (Total, Fossil Fuels, and Unallocated) for each country. A variable for year-over-year percentage (YoY) difference was created to normalize all comparisons. 
 
 ```{r dataset wrangling}
 #create new data frame, change column names
 RDD.newcolnames <- RDD.raw %>%
   row_to_names(row_number = 1)
 
-#the column names were imported improperly. The first row contains the correct column names, so we used the janitor package since they have a function that will replace the column names with the first row.
+#The column names were imported improperly. The first row contains the correct column names, so we used the janitor package since they have a function that will replace the column names with the first row.
 
- 
 
 RDD.countries <-
   filter(RDD.newcolnames,
@@ -107,7 +110,7 @@ RDD.final <- RDD.countries %>%
 
 RDD.transpose <- data.frame(t(RDD.final))
 
-#In our final data frame, we want each year to have its own row but in the original dataset that we had, each year was a column. We transposed it.
+#In our final data frame, we want each year to have its own row; however, in the original dataset, each year was a column. We transposed it.
 
 colnames(RDD.transpose) <- c("Germany.FossilFuels", "Germany.Unallocated", "Germany.TotalBudget", "US.FossilFuels", "US.Unallocated", "US.TotalBudget")
 
@@ -144,7 +147,7 @@ RDD.Germany <- data.frame(Year=c("1985", "1986", "1987", "1988", "1989", "1990",
 \newpage
 
 # Analysis
-The analysis of this dataset focused on comparing the mean investment YOY difference of the Pre-Obama era and the mean investment YOY difference of the Obama era. However, we need to ensure any changes in investment is unique to the Obama administration and not occurring globally. Therefore, we will also utilize t-tests to compare US investments to Germany's within the same time period.
+Our analysis of this dataset focuses on comparing the mean investment YoY difference of the Pre-Obama era and the mean investment YoY difference of the Obama era. However, we need to ensure any changes in investment is unique to the Obama administration and not occurring globally. Therefore, we will also utilize t-tests to compare US investments to Germany's within the same time period.
 
 ```{r visualizing the US data}
 #Adding date column to US data frame and transforming it into date object. Also adding a column to denote pre or Obama era
@@ -162,8 +165,8 @@ RDD.US.Eras.plot <- RDD.US.Eras %>%
   geom_point() +
   geom_smooth(data = subset(RDD.US.Eras, Era == "Pre"), method = "lm", se=FALSE, color= "darkolivegreen3") +
   geom_smooth(data = subset(RDD.US.Eras, Era == "Obama"), method = "lm", se=FALSE, color= "dodgerblue3") +
-  labs(title = "Year over year percent \n change in low carbon RDD",
-       y="Year over year percent change",
+  labs(title = "Year-over-Year Percent Change in Public \n Low-Carbon Energy RD&D Spending: U.S.",
+       y="YoY Percent Change",
        x="Year") + 
   scale_color_manual(values = c("darkblue", "darkgreen")) +
   scale_x_date(date_breaks = "2 years", date_labels = "%Y") +
@@ -187,16 +190,16 @@ US.and.Germany.RDD$Date <- c(ymd(paste0(US.and.Germany.RDD$Year, "-01-01")))
 
 #plotting the data
 US.Germany.RDD.plot <- ggplot(US.and.Germany.RDD,
-                              aes(x= Date,
-                                  y= Percent.Change, 
-                                  color= Country)) + 
+                              aes(x = Date,
+                                  y = Percent.Change, 
+                                  color = Country)) + 
   geom_line() +
   geom_point() +
   geom_smooth(data = subset(US.and.Germany.RDD, Country == "Germany"), method = "lm", se=FALSE, color= "tomato2") +
   geom_smooth(data = subset(RDD.US.Eras, Country == "US"), method = "lm", se=FALSE, color= "dodgerblue3") +
   scale_color_manual(values = c("tomato3", "darkblue")) +
-  labs(title = "Year over year percent \n change in low carbon RDD",
-       y="Year over year percent change",
+  labs(title = "YoY Change in Public Low-Carbon \n Energy RD&D Spending: US vs. Germany",
+       y="Year-over-Year Percent Change",
        x="Year") + 
   scale_x_date(date_breaks = "2 years", date_labels = "%Y") +
   our_theme +
@@ -212,6 +215,51 @@ print(US.Germany.RDD.plot)
 
 ```{r conducting 3 ttests}
 
+# T-test #1) U.S. Public Low-Carbon Energy RD&D Spending: Pre-Obama (1985-2008) vs. during Obama Administration (2009-2015)
+
+        #Run  two-sample T-test on US RDD "Eras" data to determine if = mean YoY change in investment is the same or different before vs. during Obama admin
+        ##hypothesis (?????) == change in mean YoY investment is significant during Obama administration
+
+US.Pre.v.Post.Obama.ttest <- t.test(RDD.US.Eras$Percent.Change ~ 
+                                      RDD.US.Eras$Era)
+
+US.Pre.v.Post.Obama.ttest
+
+      #The p-value is 0.5771 which is greater than 0.05 so THIS MEANS WE ACCEPT OUR NULL HYPOTHESIS? THAT MEANS THAT THE YOY CHANGE IN SPENDING WAS NOT (??) SIGNIFICANTLY DIFFERENT BTW THE PRE-OBAMA ERA AND THE POST-OBAMA ERA?? 
+
+#---------------------------
+  
+# T-test #2) Pre-Obama Public Low-Carbon RD&D Spending (1985-2008): U.S. vs Germany 
+
+Pre.2009.US.Germany.RDD <- filter(US.and.Germany.RDD, Year %in% c(1985:2008))
+  
+Pre.2009.US.Germany.ttest <- t.test(Pre.2009.US.Germany.RDD$Percent.Change ~ 
+                                      Pre.2009.US.Germany.RDD$Country)
+
+Pre.2009.US.Germany.ttest
+
+      ##Hypothesis is that, prior to Obama's inauguration (in the period spanning 1985-2008), the mean YoY change in public low-carbon RDD spending in the United States is not statistically distinct from the mean YoY change in Germany  
+    
+      ##i'm pretty sure ^ this hypothesis would mean that our null hypothesis is: prior to obama admin, the mean YoY change in public low-carbon RDD spending in the United States IS statistically distinct from germany  
+    
+      #The p-value is 0.5113 which is greater than 0.05 so THIS MEANS WE ACCEPT OUR NULL HYPOTHESIS? THAT MEANS THAT THE YOY CHANGE IN SPENDING WAS SIGNIFICANTLY DIFFERENT BTW US AND GERMANY PRIOR TO OBAMA PRESIDENCY
+    
+      #NOTES FROM GOOGLE RE: NULL: If the p-value is below your threshold of significance (typically p < 0.05), then you can reject the null hypothesis, but this does not necessarily mean that your alternative hypothesis is true.
+
+#------------------------------
+  
+# T-test #3) Obama-era Public Low-carbon RD&D Spending (2009-2015): United States vs. Germany
+
+Post.2009.US.Germany.RDD <- filter(US.and.Germany.RDD, Year %in% c(2008:2015))
+  
+Post.2009.US.Germany.ttest <- t.test(Post.2009.US.Germany.RDD$Percent.Change ~ 
+                                      Post.2009.US.Germany.RDD$Country)
+
+Post.2009.US.Germany.ttest
+  
+        ##Hypothesis is that, in the time period after Obama's inauguration (2008-2015), the mean YoY change in public low-carbon RDD spending in the United States is statistically distinct from the mean YoY change in Germany  
+      
+        #The p-value is 0.9138 which is greater than 0.05 so DOES THIS MEAN WE ACCEPT OR REJECT OUR NULL HYPOTHESIS? WHAT DOES THE TTEST SAY ABOUT THE DIFFERENCE IN MEANS BTW THE TWO COUNTRIES? i think the null hypothesis is opposite of our hypothesis (in this case, that would be that the mean YoY change in public investment in US during obama admin isn't statistically distinct from germany)
 
 ```
 
