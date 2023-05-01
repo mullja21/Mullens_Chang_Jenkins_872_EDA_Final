@@ -58,7 +58,7 @@ RDD.raw <- read.csv("./Public_RDD_Spending_All_Countries.csv")
 
 
 # Rationale and Research Questions
-Question 1: Was public investment in lower carbon energy RD&D significant during 
+Question 1: Was the year-over-year change in public investment in lower-carbon energy RD&D significant during 
 the Obama administration?
 
 
@@ -217,19 +217,24 @@ print(US.Germany.RDD.plot)
 
 # T-test #1) U.S. Public Low-Carbon Energy RD&D Spending: Pre-Obama (1985-2008) vs. during Obama Administration (2009-2015)
 
-        #Run  two-sample T-test on US RDD "Eras" data to determine if = mean YoY change in investment is the same or different before vs. during Obama admin
-        ##hypothesis (?????) == change in mean YoY investment is significant during Obama administration
+        #Alternative hypothesis == YoY change in public spending on lower-carbon energy RD&D is significant during Obama administration
+
+        #Run two-sample T-test on US RDD "Eras" data to determine if mean YoY change in investment is the same or different before vs. during Obama admin
 
 US.Pre.v.Post.Obama.ttest <- t.test(RDD.US.Eras$Percent.Change ~ 
                                       RDD.US.Eras$Era)
 
 US.Pre.v.Post.Obama.ttest
 
-      #The p-value is 0.5771 which is greater than 0.05 so THIS MEANS WE ACCEPT OUR NULL HYPOTHESIS? THAT MEANS THAT THE YOY CHANGE IN SPENDING WAS NOT (??) SIGNIFICANTLY DIFFERENT BTW THE PRE-OBAMA ERA AND THE POST-OBAMA ERA?? 
+         #The p-value is 0.5771 which is greater than 0.05 so we must accept our null hypothesis. Therefore, mean year-over-year change in public low-carbon RD&D spending during the Obama presidency (2009-2015) was not statistically distinct from the Pre-Obama era (1985-2008) YoY spending change.
 
 #---------------------------
   
 # T-test #2) Pre-Obama Public Low-Carbon RD&D Spending (1985-2008): U.S. vs Germany 
+
+         #Alternative hypothesis == Prior to Obama's inauguration (in the period spanning 1985-2008), the mean YoY change in public low-carbon RDD spending in the United States is not statistically distinct from Germany's mean YoY change in public spending   
+    
+          ##^ this hypothesis would mean that our null hypothesis is: prior to obama admin, the mean YoY change in public low-carbon RDD spending in the United States IS statistically distinct from germany  
 
 Pre.2009.US.Germany.RDD <- filter(US.and.Germany.RDD, Year %in% c(1985:2008))
   
@@ -237,12 +242,8 @@ Pre.2009.US.Germany.ttest <- t.test(Pre.2009.US.Germany.RDD$Percent.Change ~
                                       Pre.2009.US.Germany.RDD$Country)
 
 Pre.2009.US.Germany.ttest
-
-      ##Hypothesis is that, prior to Obama's inauguration (in the period spanning 1985-2008), the mean YoY change in public low-carbon RDD spending in the United States is not statistically distinct from the mean YoY change in Germany  
     
-      ##i'm pretty sure ^ this hypothesis would mean that our null hypothesis is: prior to obama admin, the mean YoY change in public low-carbon RDD spending in the United States IS statistically distinct from germany  
-    
-      #The p-value is 0.5113 which is greater than 0.05 so THIS MEANS WE ACCEPT OUR NULL HYPOTHESIS? THAT MEANS THAT THE YOY CHANGE IN SPENDING WAS SIGNIFICANTLY DIFFERENT BTW US AND GERMANY PRIOR TO OBAMA PRESIDENCY
+      #The p-value is 0.5113 which is greater than 0.05 so we must accept our null hypothesis. Therefore, in the period prior to Obama's presidency (1985-2008), the mean year-over-year change in public low-carbon RD&D spending in the U.S. was statistically distinct from Germany.
     
       #NOTES FROM GOOGLE RE: NULL: If the p-value is below your threshold of significance (typically p < 0.05), then you can reject the null hypothesis, but this does not necessarily mean that your alternative hypothesis is true.
 
@@ -250,16 +251,16 @@ Pre.2009.US.Germany.ttest
   
 # T-test #3) Obama-era Public Low-carbon RD&D Spending (2009-2015): United States vs. Germany
 
-Post.2009.US.Germany.RDD <- filter(US.and.Germany.RDD, Year %in% c(2008:2015))
+            ##Alternative Hypothesis == during the Obama presidency (2009-2015), the mean YoY change in public low-carbon RDD spending in the United States was statistically distinct from the mean YoY change in Germany 
+
+Post.2009.US.Germany.RDD <- filter(US.and.Germany.RDD, Year %in% c(2009:2015))
   
 Post.2009.US.Germany.ttest <- t.test(Post.2009.US.Germany.RDD$Percent.Change ~ 
                                       Post.2009.US.Germany.RDD$Country)
 
 Post.2009.US.Germany.ttest
   
-        ##Hypothesis is that, in the time period after Obama's inauguration (2008-2015), the mean YoY change in public low-carbon RDD spending in the United States is statistically distinct from the mean YoY change in Germany  
-      
-        #The p-value is 0.9138 which is greater than 0.05 so DOES THIS MEAN WE ACCEPT OR REJECT OUR NULL HYPOTHESIS? WHAT DOES THE TTEST SAY ABOUT THE DIFFERENCE IN MEANS BTW THE TWO COUNTRIES? i think the null hypothesis is opposite of our hypothesis (in this case, that would be that the mean YoY change in public investment in US during obama admin isn't statistically distinct from germany)
+          #The p-value is 0.857 which is greater than 0.05 so we must accept our null hypothesis. Therefore, Obama-era (2009-2015) mean year-over-year change in public low-carbon RD&D spending in the U.S. was not statistically distinct from Germany.
 
 ```
 
