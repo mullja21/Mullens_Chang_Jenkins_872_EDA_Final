@@ -142,29 +142,68 @@ RDD.Germany <- data.frame(Year=c("1985", "1986", "1987", "1988", "1989", "1990",
 \newpage
 
 # Analysis
-The analysis of this dataset focused on comparing the mean investment YOY difference of the Pre-Obama era and the mean investment YOY difference of the Obama era. However, we need to ensure any changes in investment is unique to the Obama administration and not occuring globally. Therefore, we will also utilize t-tests to compare US investments to Germany's within the same time period.
+The analysis of this dataset focused on comparing the mean investment YOY difference of the Pre-Obama era and the mean investment YOY difference of the Obama era. However, we need to ensure any changes in investment is unique to the Obama administration and not occurring globally. Therefore, we will also utilize t-tests to compare US investments to Germany's within the same time period.
 
-```{r visualizing the data}
+```{r visualizing the US data}
+#Adding date column to US data frame and transforming it into date object. Also adding a column to denote pre or Obama era
+RDD.US.Eras <- RDD.US %>%
+  mutate(Date = ymd(paste0(RDD.US$Year, "-01-01"))) %>%
+  mutate(Era = ifelse(Year <= 2008, "Pre", "Obama"))
+
+#plotting the pre-Obama data
+RDD.US.Eras.plot <- RDD.US.Eras %>%
+  ggplot(
+         aes(x= Date,
+             y= Percent.Change,
+             color= Era)) + 
+  geom_line() +
+  geom_point() +
+  geom_smooth(data = subset(RDD.US.Eras, Era == "Pre"), method = "lm", se=FALSE, color= "darkolivegreen3") +
+  geom_smooth(data = subset(RDD.US.Eras, Era == "Obama"), method = "lm", se=FALSE, color= "dodgerblue3") +
+  labs(title = "Year over year percent \n change in low carbon RDD",
+       y="Year over year percent change",
+       x="Year") + 
+  scale_color_manual(values = c("darkblue", "darkgreen")) +
+  scale_x_date(date_breaks = "2 years", date_labels = "%Y") +
+  our_theme +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+  
+print(RDD.US.Eras.plot)
+
+```
+
+
+
+
+```{r visualizing the US and Germany data together}
+#creating one data frame for US and Germany data
 US.and.Germany.RDD <- rbind(RDD.Germany, RDD.US)
+
+#Adding Date column and formatting so that column is transformed to date class
+US.and.Germany.RDD$Date <- c(ymd(paste0(US.and.Germany.RDD$Year, "-01-01")))
 
 
 #plotting the data
 US.Germany.RDD.plot <- ggplot(US.and.Germany.RDD,
-    aes(x= Year,
-    y= Percent.Change, 
-    color= Country)) + 
-  geom_smooth() +
+                              aes(x= Date,
+                                  y= Percent.Change, 
+                                  color= Country)) + 
+  geom_line() +
   geom_point() +
+  geom_smooth(data = subset(US.and.Germany.RDD, Country == "Germany"), method = "lm", se=FALSE, color= "tomato2") +
+  geom_smooth(data = subset(RDD.US.Eras, Country == "US"), method = "lm", se=FALSE, color= "dodgerblue3") +
+  scale_color_manual(values = c("tomato3", "darkblue")) +
   labs(title = "Year over year percent \n change in low carbon RDD",
        y="Year over year percent change",
        x="Year") + 
+  scale_x_date(date_breaks = "2 years", date_labels = "%Y") +
   our_theme +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
   
 print(US.Germany.RDD.plot)
-  
 
 ```
+
 
 
 
