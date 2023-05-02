@@ -52,7 +52,7 @@ theme_set(our_theme)
 
 
 # Load your datasets
-RDD.raw <- read.csv("./Public_RDD_Spending_All_Countries.csv")
+RDD.raw <- read.csv("./Raw_Data/Public_RDD_Spending_All_Countries.csv")
 
 ```
 
@@ -140,6 +140,27 @@ RDD.Germany <- data.frame(Year=c("1985", "1986", "1987", "1988", "1989", "1990",
   mutate(Percent.Change = ((Low.Carbon.Energy -
                               lag(Low.Carbon.Energy))/lag(Low.Carbon.Energy))*100) %>%
   mutate(Country = "Germany")
+```
+
+```{r cleaning up data set for analysis}
+#Adding date column to US data frame and transforming it into date object. Also adding a column to denote pre or Obama era for graphing.
+RDD.US.Eras <- RDD.US %>%
+  mutate(Date = ymd(paste0(RDD.US$Year, "-01-01"))) %>%
+  mutate(Era = ifelse(Year <= 2008, "Pre", "Obama"))
+
+#creating one data frame for US and Germany data
+US.and.Germany.RDD <- rbind(RDD.Germany, RDD.US)
+
+#Adding Date column and formatting so that column is transformed to date class
+US.and.Germany.RDD$Date <- c(ymd(paste0(US.and.Germany.RDD$Year, "-01-01")))
+
+```
+
+
+
+```{r saving processed data}
+write.csv(US.and.Germany.RDD, row.names = FALSE, file = "./Processed_Data/US.and.Germany.RDD.csv")
+
 
 ```
 
@@ -150,11 +171,6 @@ RDD.Germany <- data.frame(Year=c("1985", "1986", "1987", "1988", "1989", "1990",
 Our analysis of this dataset focuses on comparing the mean investment YoY difference of the Pre-Obama era and the mean investment YoY difference of the Obama era. However, we need to ensure any changes in investment is unique to the Obama administration and not occurring globally. Therefore, we will also utilize t-tests to compare US investments to Germany's within the same time period.
 
 ```{r visualizing the US data}
-#Adding date column to US data frame and transforming it into date object. Also adding a column to denote pre or Obama era
-RDD.US.Eras <- RDD.US %>%
-  mutate(Date = ymd(paste0(RDD.US$Year, "-01-01"))) %>%
-  mutate(Era = ifelse(Year <= 2008, "Pre", "Obama"))
-
 #plotting the pre-Obama data
 RDD.US.Eras.plot <- RDD.US.Eras %>%
   ggplot(
@@ -181,13 +197,6 @@ print(RDD.US.Eras.plot)
 
 
 ```{r visualizing the US and Germany data together}
-#creating one data frame for US and Germany data
-US.and.Germany.RDD <- rbind(RDD.Germany, RDD.US)
-
-#Adding Date column and formatting so that column is transformed to date class
-US.and.Germany.RDD$Date <- c(ymd(paste0(US.and.Germany.RDD$Year, "-01-01")))
-
-
 #plotting the data
 US.Germany.RDD.plot <- ggplot(US.and.Germany.RDD,
                               aes(x = Date,
@@ -260,16 +269,9 @@ Post.2009.US.Germany.ttest <- t.test(Post.2009.US.Germany.RDD$Percent.Change ~
 
 Post.2009.US.Germany.ttest
   
-          #The p-value is 0.857 which is greater than 0.05 so we must accept our null hypothesis. Therefore, Obama-era (2009-2015) mean year-over-year change in public low-carbon RD&D spending in the U.S. was not statistically distinct from Germany.
+          #The p-value is 0.857 which is greater than 0.05 so the null hypothesis is accepted. Therefore, Obama-era (2009-2015) mean year-over-year change in public low-carbon RD&D spending in the U.S. was not statistically distinct from Germany.
 
 ```
-
-
-
-## Question 1: <insert specific question here and add additional subsections for additional questions below, if needed>
-
-## Question 2: 
-
 
 
 
