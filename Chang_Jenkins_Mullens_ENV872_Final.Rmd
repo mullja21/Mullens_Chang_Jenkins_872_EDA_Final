@@ -151,16 +151,22 @@ RDD.US.Eras <- RDD.US %>%
 #creating one data frame for US and Germany data
 US.and.Germany.RDD <- rbind(RDD.Germany, RDD.US)
 
-#Adding Date column and formatting so that column is transformed to date class
-US.and.Germany.RDD$Date <- c(ymd(paste0(US.and.Germany.RDD$Year, "-01-01")))
+#Adding Date column to US and Germany dataframe. Formatting so that column is transformed to date class
+
+US.and.Germany.RDD <- US.and.Germany.RDD %>%
+  mutate(Date = ymd(paste0(US.and.Germany.RDD$Year, "-01-01"))) %>%
+  mutate(Era = ifelse(Year <= 2008, "Pre", "Obama"))
 
 ```
 
 
 
 ```{r saving processed data}
+#file for Us and Germany
 write.csv(US.and.Germany.RDD, row.names = FALSE, file = "./Processed_Data/US.and.Germany.RDD.csv")
 
+#File for US alone with eras
+write.csv(RDD.US.Eras, row.names = FALSE, file = "./Processed_Data/US.Eras.RDD.csv")
 
 ```
 
