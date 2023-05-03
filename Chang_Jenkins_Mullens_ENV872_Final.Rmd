@@ -147,7 +147,7 @@ RDD.Germany <- data.frame(Year=c("1985", "1986", "1987", "1988", "1989", "1990",
 
 ```
 
-```{r cleaning up data set for analysis}
+```{r cleaning up data set for exploratory phase and analysis}
 #Adding date column to US data frame and transforming it into date object. Also 
 #adding a column to denote pre or Obama era for graphing.
 RDD.US.Eras <- RDD.US %>%
@@ -178,6 +178,40 @@ write.csv(RDD.US.Eras, row.names = FALSE, file = "./Processed_Data/US.Eras.RDD.c
 \newpage
 
 # Exploratory Analysis
+
+```{r Exploring dimensions of the wrangled data set}
+
+#US Data Set
+dim(RDD.US)
+colnames(RDD.US)
+head(RDD.US)
+
+#US and Germany
+
+```
+
+
+```{r calculating the summary statistics for US and Germany}
+
+Germ.summary <- US.and.Germany.RDD %>%
+  filter(Country== "Germany") %>%
+  summary()
+print(Germ.summary)
+
+US.Pre.summary <- US.and.Germany.RDD %>%
+  filter(Country== "US") %>%
+  filter(Era== "Pre") %>%
+  summary()
+print(US.Pre.summary)
+
+US.Obama.summary <- US.and.Germany.RDD %>%
+  filter(Country== "US") %>%
+  filter(Era== "Obama") %>%
+  summary()
+print(US.Obama.summary)
+
+```
+
 
 
 ```{r}
@@ -395,6 +429,12 @@ Post.2009.US.Germany.ttest
 # Summary and Conclusions
 
 \newpage
+
+#Scripts, data and code
+The repository linked at the beginning contains both the raw data, wrangled data, and code utilized. They are found in their respective folders.
+
+#Quality assurance 
+Please note that any conclusions created by this report are limited as only one source of data and one variable were utilized. Further examination of additional metrics and countries are recommended for future analyses.  
 
 # References
 
