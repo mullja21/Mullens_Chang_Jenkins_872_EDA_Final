@@ -217,7 +217,7 @@ print(US.Obama.summary)
 ```{r}
 # Create the combined bar plot
 RDD.US.Eras.Bar.plot <- ggplot(RDD.US.Eras, aes(x = Year)) +
-      geom_bar(aes(y = Total.Budget, fill = "Total.budget"), stat= "identity", position = "identity") +
+  geom_bar(aes(y = Total.Budget, fill = "Total.budget"), stat= "identity", position = "identity") +
   geom_bar(aes(y = Low.Carbon.Energy, fill = "Low.Carbon"), stat= "identity", position = "identity") +
   geom_bar(aes(y = Fossil.Fuel, fill = "Fossil.Fuels"), stat= "identity", position = "identity") +
   scale_fill_manual(values = c("Fossil.Fuels" = "midnightblue", "Low.Carbon" = "darkolivegreen3", "Total.budget" = "sienna3")) +
@@ -309,11 +309,50 @@ US.Germ.cowplot <- plot_grid(
   US.Germ.total.plot + theme(legend.position="none"),
   US.Germ.fossil.plot + theme(legend.position="none"),
   US.Germ.lowC.plot + theme(legend.position="none"),
-  align = "hv",
   legend_cow
   )
 print(US.Germ.cowplot)
 
+
+
+# Create the US and Germ Total bar plot
+US.Germ.total.Bar.plot <- ggplot(US.and.Germany.RDD, aes(x = Year, y= Total.Budget, fill= Country)) +
+  geom_bar(stat= "identity", position = "stack") +
+  geom_bar(stat= "identity", position = "stack") +
+  scale_fill_manual(values = c("tomato3", "darkblue")) +
+  ylim(0, 15000) +
+  labs(fill = "Country")+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+  labs(title = "Proportion of RDD Spending",
+       y="Amount in USD (2021 \n Pricess and Exchange Rates)",
+       x="Year")
+print(RDD.US.Eras.Bar.plot)
+
+# Create the US and Germ fossil fuel bar plot
+US.Germ.Fossil.fuel.Bar.plot <- ggplot(US.and.Germany.RDD, aes(x = Year, y= Fossil.Fuel, fill= Country)) +
+  geom_bar(stat= "identity", position = "stack") +
+  geom_bar(stat= "identity", position = "stack") +
+  scale_fill_manual(values = c("tomato3", "darkblue")) +
+  ylim(0, 5000) +
+  labs(fill = "Country")+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+  labs(title = "Proportion of RDD Spending",
+       y="Amount in USD (2021 \n Pricess and Exchange Rates)",
+       x="Year")
+print(US.Germ.Fossil.fuel.Bar.plot)
+
+# Create the US and Germ fossil fuel bar plot
+US.Germ.low.carbon.Bar.plot <- ggplot(US.and.Germany.RDD, aes(x = Year, y= Low.Carbon.Energy, fill= Country)) +
+  geom_bar(stat= "identity", position = "stack") +
+  geom_bar(stat= "identity", position = "stack") +
+  scale_fill_manual(values = c("tomato3", "darkblue")) +
+  ylim(0, 11000) +
+  labs(fill = "Country")+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+  labs(title = "Low Carbon RDD",
+       y="Amount in USD (2021 \n Pricess and Exchange Rates)",
+       x="Year")
+print(US.Germ.low.carbon.Bar.plot)
 
 ```
 
