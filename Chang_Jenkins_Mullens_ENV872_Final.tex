@@ -16,7 +16,6 @@
   \usepackage{unicode-math}
   \defaultfontfeatures{Scale=MatchLowercase}
   \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
-  \setmainfont[]{Times New Roman}
 \fi
 % Use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
@@ -157,11 +156,11 @@ Energy RD\&D Spending}
 Questions}\label{rationale-and-research-questions}}
 
 As the effects of climate change become more apparent, central and
-federal overnments have allocated more funding towards energy technology
-research, development, and demonstration (RD\&D). The general purpose of
-increased investment in low-carbon RD\&D is to move away from high
-greenhouse gas emitting energy sources, such as fossil fuels, which are
-a significant portion of anthropogenic emissions. Understanding how
+federal governments have allocated more funding towards energy
+technology research, development, and demonstration (RD\&D). The general
+purpose of increased investment in low-carbon RD\&D is to move away from
+high greenhouse gas emitting energy sources, such as fossil fuels, which
+are a significant portion of anthropogenic emissions. Understanding how
 energy technology RD\&D has evolved over time will be an informative
 look into how the United States plans to address climate change through
 the transition to low-carbon energy.
@@ -424,37 +423,8 @@ tables below:
   \FunctionTok{select}\NormalTok{(Fossil.Fuel, Low.Carbon.Energy, Total.Budget, Percent.Change) }\SpecialCharTok{\%\textgreater{}\%}
   \FunctionTok{summary}\NormalTok{()}
 
-\FunctionTok{kable}\NormalTok{(Germ.summary, }\AttributeTok{caption =} \StringTok{"Summary Statistics for Germany"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
+\CommentTok{\#kable(Germ.summary, caption = "Summary Statistics for Germany")}
 
-\begin{table}
-
-\caption{\label{tab:calculating the summary statistics for US and Germany and creating tables}Summary Statistics for Germany}
-\centering
-\begin{tabular}[t]{l|l|l|l|l}
-\hline
-  &  Fossil.Fuel & Low.Carbon.Energy &  Total.Budget & Percent.Change\\
-\hline
- & Min.   :  1.968 & Min.   : 284.2 & Min.   : 300.1 & Min.   :-36.4805\\
-\hline
- & 1st Qu.: 18.518 & 1st Qu.: 461.5 & 1st Qu.: 481.2 & 1st Qu.:-10.2964\\
-\hline
- & Median : 38.642 & Median : 586.7 & Median : 639.6 & Median :  0.7250\\
-\hline
- & Mean   : 70.604 & Mean   : 703.0 & Mean   : 789.3 & Mean   : -0.4935\\
-\hline
- & 3rd Qu.: 61.380 & 3rd Qu.: 860.2 & 3rd Qu.:1003.4 & 3rd Qu.:  7.0978\\
-\hline
- & Max.   :299.784 & Max.   :1780.8 & Max.   :2080.6 & Max.   : 46.6672\\
-\hline
- & NA & NA & NA & NA's   :1\\
-\hline
-\end{tabular}
-\end{table}
-
-\begin{Shaded}
-\begin{Highlighting}[]
 \CommentTok{\#creating US Pre Obama summary}
 \NormalTok{US.Pre.summary }\OtherTok{\textless{}{-}}\NormalTok{ US.and.Germany.RDD }\SpecialCharTok{\%\textgreater{}\%}
   \FunctionTok{filter}\NormalTok{(Country}\SpecialCharTok{==} \StringTok{"US"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
@@ -462,37 +432,8 @@ tables below:
   \FunctionTok{select}\NormalTok{(Fossil.Fuel, Low.Carbon.Energy, Total.Budget, Percent.Change) }\SpecialCharTok{\%\textgreater{}\%}
   \FunctionTok{summary}\NormalTok{()}
 
-\FunctionTok{kable}\NormalTok{(US.Pre.summary, }\AttributeTok{caption =} \StringTok{"Summary Statistics for US pre{-}Obama administration"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
+\CommentTok{\#kable(US.Pre.summary, caption = "Summary Statistics for US pre{-}Obama administration")}
 
-\begin{table}
-
-\caption{\label{tab:calculating the summary statistics for US and Germany and creating tables}Summary Statistics for US pre-Obama administration}
-\centering
-\begin{tabular}[t]{l|l|l|l|l}
-\hline
-  &  Fossil.Fuel & Low.Carbon.Energy &  Total.Budget & Percent.Change\\
-\hline
- & Min.   : 262.0 & Min.   :2865 & Min.   :3128 & Min.   :-15.829\\
-\hline
- & 1st Qu.: 537.4 & 1st Qu.:3130 & 1st Qu.:3803 & 1st Qu.: -5.289\\
-\hline
- & Median : 598.6 & Median :3386 & Median :4120 & Median : -2.426\\
-\hline
- & Mean   : 653.4 & Mean   :3500 & Mean   :4153 & Mean   :  0.767\\
-\hline
- & 3rd Qu.: 697.9 & 3rd Qu.:3605 & 3rd Qu.:4506 & 3rd Qu.:  6.630\\
-\hline
- & Max.   :1603.3 & Max.   :4789 & Max.   :5498 & Max.   : 27.712\\
-\hline
- & NA & NA & NA & NA's   :1\\
-\hline
-\end{tabular}
-\end{table}
-
-\begin{Shaded}
-\begin{Highlighting}[]
 \CommentTok{\#creating Obama admin summary}
 \NormalTok{US.Obama.summary }\OtherTok{\textless{}{-}}\NormalTok{ US.and.Germany.RDD }\SpecialCharTok{\%\textgreater{}\%}
   \FunctionTok{filter}\NormalTok{(Country}\SpecialCharTok{==} \StringTok{"US"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
@@ -500,60 +441,19 @@ tables below:
   \FunctionTok{select}\NormalTok{(Fossil.Fuel, Low.Carbon.Energy, Total.Budget, Percent.Change) }\SpecialCharTok{\%\textgreater{}\%}
   \FunctionTok{summary}\NormalTok{()}
 
-\FunctionTok{kable}\NormalTok{(US.Obama.summary, }\AttributeTok{caption =} \StringTok{"Summary Statistics for Obama administration"}\NormalTok{)}
+\CommentTok{\#kable(US.Obama.summary, caption = "Summary Statistics for Obama administration")}
 \end{Highlighting}
 \end{Shaded}
 
-\begin{table}
-
-\caption{\label{tab:calculating the summary statistics for US and Germany and creating tables}Summary Statistics for Obama administration}
-\centering
-\begin{tabular}[t]{l|l|l|l|l}
-\hline
-  &  Fossil.Fuel & Low.Carbon.Energy &  Total.Budget & Percent.Change\\
-\hline
- & Min.   : 371.6 & Min.   :5303 & Min.   : 5869 & Min.   :-34.043\\
-\hline
- & 1st Qu.: 435.7 & 1st Qu.:6438 & 1st Qu.: 6873 & 1st Qu.: -4.974\\
-\hline
- & Median : 483.7 & Median :6616 & Median : 7099 & Median : -1.910\\
-\hline
- & Mean   :1011.9 & Mean   :6692 & Mean   : 7704 & Mean   :  8.170\\
-\hline
- & 3rd Qu.: 587.6 & 3rd Qu.:7006 & 3rd Qu.: 7496 & 3rd Qu.: 17.600\\
-\hline
- & Max.   :4181.8 & Max.   :8040 & Max.   :12222 & Max.   : 67.887\\
-\hline
-\end{tabular}
-\end{table}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{\#US Line Plot}
-\NormalTok{RDD.US.Eras.Line.plot }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(RDD.US.Eras, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ Date)) }\SpecialCharTok{+}
-  \FunctionTok{geom\_line}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{y =}\NormalTok{ Total.Budget, }\AttributeTok{color=} \StringTok{"Total.Spending"}\NormalTok{)) }\SpecialCharTok{+}
-  \FunctionTok{geom\_line}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{y =}\NormalTok{ Fossil.Fuel, }\AttributeTok{color=} \StringTok{"Fossil.Fuels"}\NormalTok{)) }\SpecialCharTok{+}
-  \FunctionTok{geom\_line}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{y =}\NormalTok{ Low.Carbon.Energy, }\AttributeTok{color=} \StringTok{"Low.Carbon"}\NormalTok{)) }\SpecialCharTok{+}
-  \FunctionTok{theme}\NormalTok{(}\AttributeTok{axis.text.x =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{angle =} \DecValTok{90}\NormalTok{, }\AttributeTok{vjust =} \FloatTok{0.5}\NormalTok{, }\AttributeTok{hjust=}\DecValTok{1}\NormalTok{, }\AttributeTok{size =} \DecValTok{9}\NormalTok{)) }\SpecialCharTok{+}
-  \FunctionTok{scale\_color\_manual}\NormalTok{(}\AttributeTok{name =} \StringTok{"Proportion of }\SpecialCharTok{\textbackslash{}n}\StringTok{ RDD Spending"}\NormalTok{, }\AttributeTok{values=} \FunctionTok{c}\NormalTok{(}
-    \StringTok{"Fossil.Fuels"} \OtherTok{=} \StringTok{"midnightblue"}\NormalTok{, }
-    \StringTok{"Low.Carbon"} \OtherTok{=} \StringTok{"darkolivegreen3"}\NormalTok{, }
-    \StringTok{"Total.Spending"} \OtherTok{=} \StringTok{"sienna3"}\NormalTok{)) }\SpecialCharTok{+}
-  \FunctionTok{scale\_x\_date}\NormalTok{(}\AttributeTok{date\_breaks =} \StringTok{"3 years"}\NormalTok{, }\AttributeTok{date\_labels =} \StringTok{"\%Y"}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Proportion of }\SpecialCharTok{\textbackslash{}n}\StringTok{ United States RDD }\SpecialCharTok{\textbackslash{}n}\StringTok{ Spending 1985{-}2015"}\NormalTok{,}
-       \AttributeTok{y=}\StringTok{"Amount in USD (2021 }\SpecialCharTok{\textbackslash{}n}\StringTok{ Prices and Exchange Rates)"}\NormalTok{,}
-       \AttributeTok{x=}\StringTok{"Year"}\NormalTok{,}
-       \AttributeTok{color=} \StringTok{"Legend Title"}\NormalTok{)}
-
-\FunctionTok{print}\NormalTok{(RDD.US.Eras.Line.plot)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{figure}
-\centering
-\includegraphics{Chang_Jenkins_Mullens_ENV872_Final_files/figure-latex/Line Plot of All US RDD-1.pdf}
-\caption{US RDD Spending 1985 to 2015}
-\end{figure}
+First, the US and Germany total budgets, fossil fuel budgets, and low
+carbon energy budgets were graphed. A line graph was utilized to
+identify any potential trends in spending while a bar graph was utilized
+to examine the relative magnitude of spending by country. Generally, the
+United States spends more on RD\&D than Germany Figure
+\textbackslash{}@ref(fig:Germany and US Line Plot for total budget).
+Germany's spending appears to be less variable than US RD\&D spending as
+demonstrated by Figure Figure @ref(fig:Germany and US Bar Plot for total
+budget).
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -614,55 +514,10 @@ to visualize potential trends.}
 to visually compare relative magnitude of total spending.}
 \end{figure}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{\#Fossil Fuel Germ and US Line Plot}
-\NormalTok{US.Germ.fossil.plot }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(US.and.Germany.RDD,}
-                              \FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ Date,}
-                                  \AttributeTok{y =}\NormalTok{ Fossil.Fuel, }
-                                  \AttributeTok{color =}\NormalTok{ Country)) }\SpecialCharTok{+} 
-  \FunctionTok{geom\_line}\NormalTok{(}\AttributeTok{size=} \FloatTok{0.9}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{ylim}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{12500}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{scale\_color\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{"tomato3"}\NormalTok{, }\StringTok{"darkblue"}\NormalTok{)) }\SpecialCharTok{+}
-  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Fossil Fuel RDD Spending 1985{-}2015"}\NormalTok{,}
-       \AttributeTok{y=}\StringTok{"Amount in USD (2021 }\SpecialCharTok{\textbackslash{}n}\StringTok{ Prices and Exchange Rates)"}\NormalTok{,}
-       \AttributeTok{x=}\StringTok{"Year"}\NormalTok{,}
-       \AttributeTok{color=} \StringTok{"Legend Title"}\NormalTok{)}
-
-\FunctionTok{print}\NormalTok{(US.Germ.fossil.plot)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{figure}
-\centering
-\includegraphics{Chang_Jenkins_Mullens_ENV872_Final_files/figure-latex/Fossil Fuel Germ and US Line-1.pdf}
-\caption{US and Germany Fossil Fuel RDD Spending 1985 to 2015. Line
-graph used to visualize potential trends.}
-\end{figure}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{\# Create the US and Germ fossil fuel bar plot}
-\NormalTok{US.Germ.Fossil.fuel.Bar.plot }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(US.and.Germany.RDD, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ Year, }\AttributeTok{y=}\NormalTok{ Fossil.Fuel, }\AttributeTok{fill=}\NormalTok{ Country)) }\SpecialCharTok{+}
-  \FunctionTok{geom\_bar}\NormalTok{(}\AttributeTok{stat=} \StringTok{"identity"}\NormalTok{, }\AttributeTok{position =} \StringTok{"stack"}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{geom\_bar}\NormalTok{(}\AttributeTok{stat=} \StringTok{"identity"}\NormalTok{, }\AttributeTok{position =} \StringTok{"stack"}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{scale\_fill\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{"tomato3"}\NormalTok{, }\StringTok{"darkblue"}\NormalTok{)) }\SpecialCharTok{+}
-  \FunctionTok{ylim}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{5000}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{labs}\NormalTok{(}\AttributeTok{fill =} \StringTok{"Country"}\NormalTok{)}\SpecialCharTok{+}
-  \FunctionTok{theme}\NormalTok{(}\AttributeTok{axis.text.x =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{angle =} \DecValTok{90}\NormalTok{, }\AttributeTok{vjust =} \FloatTok{0.5}\NormalTok{, }\AttributeTok{hjust=}\DecValTok{1}\NormalTok{, }\AttributeTok{size =} \DecValTok{9}\NormalTok{)) }\SpecialCharTok{+}
-  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Fossil Fuel of RDD Spending"}\NormalTok{,}
-       \AttributeTok{y=}\StringTok{"Amount in USD (2021 }\SpecialCharTok{\textbackslash{}n}\StringTok{ Prices and Exchange Rates)"}\NormalTok{,}
-       \AttributeTok{x=}\StringTok{"Year"}\NormalTok{)}
-\FunctionTok{print}\NormalTok{(US.Germ.Fossil.fuel.Bar.plot)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{figure}
-\centering
-\includegraphics{Chang_Jenkins_Mullens_ENV872_Final_files/figure-latex/US and Germ fossil fuel Bar-1.pdf}
-\caption{US and Germany Fossil Fuel RDD Spending 1985 to 2015. Bar graph
-used to visually compare relative magnitude of total spending.}
-\end{figure}
+For both countries, it appears that Low Carbon RD\&D spending decreased
+from 1985 to 2000 and increased from 2000 to 2015 @ref(fig: US and
+Germany Low Carbon Spending 1985 to 2015. Line graph used to visualize
+potential trends.)
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -714,17 +569,162 @@ used to visualize potential trends.}
 used to visually compare relative magnitude of total spending.}
 \end{figure}
 
+It is unclear whether these changes are significant and further analysis
+is needed. A few notable abnormalities in the Germany data set include
+the years 1996, 1997, and 1998 where fossil fuel spending was well below
+the average Figure .
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#Fossil Fuel Germ and US Line Plot}
+\NormalTok{US.Germ.fossil.plot }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(US.and.Germany.RDD,}
+                              \FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ Date,}
+                                  \AttributeTok{y =}\NormalTok{ Fossil.Fuel, }
+                                  \AttributeTok{color =}\NormalTok{ Country)) }\SpecialCharTok{+} 
+  \FunctionTok{geom\_line}\NormalTok{(}\AttributeTok{size=} \FloatTok{0.9}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{ylim}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{12500}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_color\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{"tomato3"}\NormalTok{, }\StringTok{"darkblue"}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Fossil Fuel RDD Spending 1985{-}2015"}\NormalTok{,}
+       \AttributeTok{y=}\StringTok{"Amount in USD (2021 }\SpecialCharTok{\textbackslash{}n}\StringTok{ Prices and Exchange Rates)"}\NormalTok{,}
+       \AttributeTok{x=}\StringTok{"Year"}\NormalTok{,}
+       \AttributeTok{color=} \StringTok{"Legend Title"}\NormalTok{)}
+
+\FunctionTok{print}\NormalTok{(US.Germ.fossil.plot)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}
+\centering
+\includegraphics{Chang_Jenkins_Mullens_ENV872_Final_files/figure-latex/Fossil Fuel Germ and US Line-1.pdf}
+\caption{US and Germany Fossil Fuel RDD Spending 1985 to 2015. Line
+graph used to visualize potential trends.}
+\end{figure}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Create the US and Germ fossil fuel bar plot}
+\NormalTok{US.Germ.Fossil.fuel.Bar.plot }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(US.and.Germany.RDD, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ Year, }\AttributeTok{y=}\NormalTok{ Fossil.Fuel, }\AttributeTok{fill=}\NormalTok{ Country)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_bar}\NormalTok{(}\AttributeTok{stat=} \StringTok{"identity"}\NormalTok{, }\AttributeTok{position =} \StringTok{"stack"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_bar}\NormalTok{(}\AttributeTok{stat=} \StringTok{"identity"}\NormalTok{, }\AttributeTok{position =} \StringTok{"stack"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{"tomato3"}\NormalTok{, }\StringTok{"darkblue"}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{ylim}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{5000}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{fill =} \StringTok{"Country"}\NormalTok{)}\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{axis.text.x =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{angle =} \DecValTok{90}\NormalTok{, }\AttributeTok{vjust =} \FloatTok{0.5}\NormalTok{, }\AttributeTok{hjust=}\DecValTok{1}\NormalTok{, }\AttributeTok{size =} \DecValTok{9}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Fossil Fuel of RDD Spending"}\NormalTok{,}
+       \AttributeTok{y=}\StringTok{"Amount in USD (2021 }\SpecialCharTok{\textbackslash{}n}\StringTok{ Prices and Exchange Rates)"}\NormalTok{,}
+       \AttributeTok{x=}\StringTok{"Year"}\NormalTok{)}
+\FunctionTok{print}\NormalTok{(US.Germ.Fossil.fuel.Bar.plot)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}
+\centering
+\includegraphics{Chang_Jenkins_Mullens_ENV872_Final_files/figure-latex/US and Germ fossil fuel Bar-1.pdf}
+\caption{US and Germany Fossil Fuel RDD Spending 1985 to 2015. Bar graph
+used to visually compare relative magnitude of total spending.}
+\end{figure}
+
+Then, the US data was graphed alone to examine the different spending
+categories, Fossil Fuels and Low Carbon Energy, against the total
+spending Figure . In 2009, there is a noticeable increase in the total
+spending for both fossil fuels and low carbon energy; the total budget
+doubled from the previous year. After the initial increase in 2009, the
+total budget, and consequently the low carbon energy and fossil fuel,
+numbers appear to decline.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#US Line Plot}
+\NormalTok{RDD.US.Eras.Line.plot }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(RDD.US.Eras, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ Date)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_line}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{y =}\NormalTok{ Total.Budget, }\AttributeTok{color=} \StringTok{"Total.Spending"}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_line}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{y =}\NormalTok{ Fossil.Fuel, }\AttributeTok{color=} \StringTok{"Fossil.Fuels"}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_line}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{y =}\NormalTok{ Low.Carbon.Energy, }\AttributeTok{color=} \StringTok{"Low.Carbon"}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{axis.text.x =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{angle =} \DecValTok{90}\NormalTok{, }\AttributeTok{vjust =} \FloatTok{0.5}\NormalTok{, }\AttributeTok{hjust=}\DecValTok{1}\NormalTok{, }\AttributeTok{size =} \DecValTok{9}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{scale\_color\_manual}\NormalTok{(}\AttributeTok{name =} \StringTok{"Proportion of }\SpecialCharTok{\textbackslash{}n}\StringTok{ RDD Spending"}\NormalTok{, }\AttributeTok{values=} \FunctionTok{c}\NormalTok{(}
+    \StringTok{"Fossil.Fuels"} \OtherTok{=} \StringTok{"midnightblue"}\NormalTok{, }
+    \StringTok{"Low.Carbon"} \OtherTok{=} \StringTok{"darkolivegreen3"}\NormalTok{, }
+    \StringTok{"Total.Spending"} \OtherTok{=} \StringTok{"sienna3"}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{scale\_x\_date}\NormalTok{(}\AttributeTok{date\_breaks =} \StringTok{"3 years"}\NormalTok{, }\AttributeTok{date\_labels =} \StringTok{"\%Y"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Proportion of }\SpecialCharTok{\textbackslash{}n}\StringTok{ United States RDD }\SpecialCharTok{\textbackslash{}n}\StringTok{ Spending 1985{-}2015"}\NormalTok{,}
+       \AttributeTok{y=}\StringTok{"Amount in USD (2021 }\SpecialCharTok{\textbackslash{}n}\StringTok{ Prices and Exchange Rates)"}\NormalTok{,}
+       \AttributeTok{x=}\StringTok{"Year"}\NormalTok{,}
+       \AttributeTok{color=} \StringTok{"Legend Title"}\NormalTok{)}
+
+\FunctionTok{print}\NormalTok{(RDD.US.Eras.Line.plot)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}
+\centering
+\includegraphics{Chang_Jenkins_Mullens_ENV872_Final_files/figure-latex/Line Plot of All US RDD-1.pdf}
+\caption{US RDD Spending 1985 to 2015}
+\end{figure}
+
+Based on these findings, we decided two-tailed t-tests should be
+administered to determine whether any changes in RD\&D during the Obama
+administration were significant. It was necessary to compare the US
+pre-Obama administration and the Obama administration time periods with
+the RD\&D spending for Germany. However, creating a standard metric was
+required to conduct this analysis. Thus, the year over year change in
+RD\&D for each energy type was calculated to draw comparisons.
+
 \newpage
 
 \hypertarget{analysis}{%
 \section{Analysis}\label{analysis}}
 
-Our analysis of this dataset focuses on comparing the mean investment
-YoY difference of the Pre-Obama era and the mean investment YoY
-difference of the Obama era. However, we need to ensure any changes in
-investment is unique to the Obama administration and not occurring
-globally. Therefore, we will also utilize t-tests to compare US
-investments to Germany's within the same time period.
+The analysis of the RD\&D Budget data focuses on comparing the mean
+year-over-year (YoY) percent change in public low-carbon energy RD\&D
+spending in the period preceding Obama's presidency (1985-2008) to the
+YoY percent change during Obama's presidency (2009-2015). To ensure any
+Obama-era changes in public low-carbon RD\&D investment within the
+United States are unique to the administration \& its domestic energy
+policy agenda, and not co-occurring with global shifts in public RD\&D
+investment, trend significance in the United States was compared to the
+control, Germany. To analyze these trends statistically, rather than
+visually, a series of two-sample t-tests was employed using the
+RDD.US.Eras data frame and filtered US.and.Germany.RDD data frame to
+separately address the three research questions.
+
+\hypertarget{united-states-pre-obama-vs.-obama-era-analysis}{%
+\subsection{United States Pre-Obama vs.~Obama-era
+Analysis}\label{united-states-pre-obama-vs.-obama-era-analysis}}
+
+\textbf{Question 1:} In the United States, was the difference in means
+between Pre-Obama and Obama-era year-over-year percent change in public
+lower-carbon energy RD\&D spending significant?
+
+In the first two-sample t-test, we addressed the first research question
+by looking at public low-carbon energy RD\&D spending in the United
+States using RDD.US.Eras data frame to determine if the mean YoY percent
+change prior to Obama's presidency (1985-2008) was as significant as the
+mean YoY percent change during the Obama administration (2009-2015).
+RDD.US.Eras Percent.Change was the continuous dependent variable, and
+RDD.US.Eras Era was the categorical variable with two levels (Pre-Obama
+and Obama-era).
+
+\begin{itemize}
+\item
+  \textbf{Null Hypothesis 1 (H0):} Mean YoY change in public low-carbon
+  RD\&D spending during the Obama presidency (2009-2015) was not
+  statistically distinct from the Pre-Obama era (1985-2008) YoY change
+  in spending
+\item
+  \textbf{Alternative Hypothesis 1 (H1):} Mean YoY change in public
+  spending on lower-carbon energy RD\&D was significantly different
+  during Obama's presidency.
+\end{itemize}
+
+The test returned a p-value of 0.5771 which is above our threshold of
+significance (p \textless{} 0.05). Therefore, we fail to reject our null
+hypothesis (H) that mean YoY change in public low-carbon RD\&D spending
+during the Obama presidency (2009-2015) was not statistically distinct
+from the Pre-Obama era (1985-2008) YoY change in spending.
+
+Figure displays the year over year percent change in low carbon energy
+RD\&D for both the pre-Obama and Obama time periods. A linear regression
+was constructed and added to the YoY lines to examine the data trends
+over time.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -776,58 +776,45 @@ investments to Germany's within the same time period.
 \caption{US Year over Year RDD Spending 1985 to 2015}
 \end{figure}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{\#plotting the data}
-\NormalTok{US.Germany.RDD.plot }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(US.and.Germany.RDD,}
-                              \FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ Date,}
-                                  \AttributeTok{y =}\NormalTok{ Percent.Change, }
-                                  \AttributeTok{color =}\NormalTok{ Country)) }\SpecialCharTok{+} 
-  \FunctionTok{geom\_line}\NormalTok{() }\SpecialCharTok{+}
-  \FunctionTok{geom\_point}\NormalTok{() }\SpecialCharTok{+}
-  \FunctionTok{geom\_smooth}\NormalTok{(}\AttributeTok{data =} \FunctionTok{subset}\NormalTok{(US.and.Germany.RDD, Country }\SpecialCharTok{==} \StringTok{"Germany"}\NormalTok{), }\AttributeTok{method =} \StringTok{"lm"}\NormalTok{, }\AttributeTok{se=}\ConstantTok{FALSE}\NormalTok{, }\AttributeTok{color=} \StringTok{"tomato2"}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{geom\_smooth}\NormalTok{(}\AttributeTok{data =} \FunctionTok{subset}\NormalTok{(RDD.US.Eras, Country }\SpecialCharTok{==} \StringTok{"US"}\NormalTok{), }\AttributeTok{method =} \StringTok{"lm"}\NormalTok{, }\AttributeTok{se=}\ConstantTok{FALSE}\NormalTok{, }\AttributeTok{color=} \StringTok{"dodgerblue3"}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{scale\_color\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{"tomato3"}\NormalTok{, }\StringTok{"darkblue"}\NormalTok{)) }\SpecialCharTok{+}
-  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"YoY Change in Public Low{-}Carbon }\SpecialCharTok{\textbackslash{}n}\StringTok{ Energy RD\&D Spending: }\SpecialCharTok{\textbackslash{}n}\StringTok{ US vs. Germany"}\NormalTok{,}
-       \AttributeTok{y=}\StringTok{"Year{-}over{-}Year Percent Change"}\NormalTok{,}
-       \AttributeTok{x=}\StringTok{"Year"}\NormalTok{) }\SpecialCharTok{+} 
-  \FunctionTok{scale\_x\_date}\NormalTok{(}\AttributeTok{date\_breaks =} \StringTok{"2 years"}\NormalTok{, }\AttributeTok{date\_labels =} \StringTok{"\%Y"}\NormalTok{) }\SpecialCharTok{+}
-\NormalTok{  our\_theme }\SpecialCharTok{+}
-  \FunctionTok{theme}\NormalTok{(}\AttributeTok{axis.text.x =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{angle =} \DecValTok{90}\NormalTok{, }\AttributeTok{vjust =} \FloatTok{0.5}\NormalTok{, }\AttributeTok{hjust=}\DecValTok{1}\NormalTok{))}
-  
-\FunctionTok{print}\NormalTok{(US.Germany.RDD.plot)}
-\end{Highlighting}
-\end{Shaded}
+\hypertarget{pre-obama-united-states-vs.-germany-analysis}{%
+\subsection{Pre-Obama United States vs.~Germany
+Analysis}\label{pre-obama-united-states-vs.-germany-analysis}}
 
-\begin{verbatim}
-## `geom_smooth()` using formula = 'y ~ x'
-\end{verbatim}
+\textbf{Question 2:} Prior to Obama's presidency (1985-2008), was mean
+year-over-year percent change in public lower-carbon energy RD\&D
+spending in the United States significantly distinct from Germany?
 
-\begin{verbatim}
-## Warning: Removed 1 rows containing non-finite values (`stat_smooth()`).
-\end{verbatim}
+To address the second question regarding pre-Obama spending in U.S. and
+Germany, we needed to wrangle the data to only include records prior to
+Obama's inauguration, for years 1985-2008. We then ran a two-sample
+T-test on the filtered pre-Obama data to determine whether mean YoY
+percent change in public RD\&D spending was statistically different
+between the two counties. Pre.2009.US.Germany.RDD Percent.Change was the
+continuous dependent variable, and Pre.2009.US.Germany.RDD Country was
+the categorical variable with two levels (United States and Germany).
 
-\begin{verbatim}
-## `geom_smooth()` using formula = 'y ~ x'
-\end{verbatim}
+\begin{itemize}
+\item
+  \textbf{Null Hypothesis 2 (H0):} Prior to Obama's presidency, there
+  was a significant difference in means between the U.S. and Germany for
+  YoY percent change in public spending on lower-carbon energy RD\&D
+\item
+  \textbf{Alternative Hypothesis 2 (H1):} The difference in means
+  between the U.S. and Germany for YoY percent change in public spending
+  on lower-carbon energy RD\&D was not significant prior to Obama's
+  presidency
+\end{itemize}
 
-\begin{verbatim}
-## Warning: Removed 1 rows containing non-finite values (`stat_smooth()`).
-\end{verbatim}
+Our test returned a p-value of 0.5113 which is above the threshold of
+significance (p \textless{} 0.05). Therefore, we fail to reject the null
+hypothesis (H0) that in the period prior to Obama's presidency
+(1985-2008), mean year-over-year change in public low-carbon RD\&D
+spending in the United States was statistically distinct from Germany.
 
-\begin{verbatim}
-## Warning: Removed 2 rows containing missing values (`geom_line()`).
-\end{verbatim}
-
-\begin{verbatim}
-## Warning: Removed 2 rows containing missing values (`geom_point()`).
-\end{verbatim}
-
-\begin{figure}
-\centering
-\includegraphics{Chang_Jenkins_Mullens_ENV872_Final_files/figure-latex/visualizing the US and Germany data together-1.pdf}
-\caption{US and Germany Year over Year RDD Spending 1985 to 2015}
-\end{figure}
+Figure displays the year over year percent change in low carbon energy
+RDD for the US and Germany during the pre-Obama administration time
+period. A linear regression was constructed and added to the YoY lines
+to examine the data trends over time.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -882,6 +869,47 @@ investments to Germany's within the same time period.
 \includegraphics{Chang_Jenkins_Mullens_ENV872_Final_files/figure-latex/visualizing the pre US and Germany data together-1.pdf}
 \caption{US and Germany Year over Year RDD Spending 1985 to 2008}
 \end{figure}
+
+\hypertarget{obama-era-united-states-vs.-germany-analysis}{%
+\subsection{Obama-era United States vs.~Germany
+Analysis}\label{obama-era-united-states-vs.-germany-analysis}}
+
+\textbf{Question 3:} During Obama's presidency (2009-2015), was mean
+year-over-year percent change in public lower-carbon energy RD\&D
+spending in the United States significantly distinct from Germany?
+
+We then conducted a similar two-sided t-test to address the third
+question regarding Obama-era spending in the U.S. and Germany. After
+wrangling the data to only include records during Obama's two-term
+presidency, for years 2009-2015, we ran the analysis on the filtered
+data to determine whether mean YoY percent change in Obama-era public
+RD\&D spending was statistically different between the two counties.
+Post.2009.US.Germany.RDD Percent.Change was the continuous dependent
+variable, and Post.2009.US.Germany.RDD Country was the categorical
+variable with two levels (United States and Germany).
+
+\begin{itemize}
+\item
+  \textbf{Null Hypothesis 3 (H0):} During Obama's presidency, mean YoY
+  percent change in public spending on lower-carbon energy RD\&D in the
+  United States was not statistically distinct from Germany YoY change
+  in spending
+\item
+  \textbf{Alternative Hypothesis 3 (H1):} Obama-era YoY percent change
+  in public lower-carbon energy RD\&D spending in the United States was
+  significantly different from Germany YoY change in spending
+\end{itemize}
+
+The final two-sided t-test returned a p-value of 0.857 which is above
+the threshold of significance (p \textless{} 0.05). Therefore, we fail
+to reject the null hypothesis (H0) that mean YoY change in public
+low-carbon RD\&D spending in the U.S. was not statistically distinct
+from Germany during the Obama Administration.
+
+figure displays the year over year percent change in low carbon energy
+RDD for the US and Germany during the Obama administration time period.
+A linear regression was constructed and added to the YoY lines to
+examine the data trends over time.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1002,9 +1030,7 @@ investments to Germany's within the same time period.
 \hypertarget{summary-and-conclusions}{%
 \section{Summary and Conclusions}\label{summary-and-conclusions}}
 
-\hypertarget{list-of-p-values-from-two-sided-t-test-analyses.}{%
-\subsection{List of p-values from two-sided t-test
-analyses.}\label{list-of-p-values-from-two-sided-t-test-analyses.}}
+\textbf{List of p-values from two-sided t-test analyses.}
 
 \begin{longtable}[]{@{}ll@{}}
 \toprule()
@@ -1016,6 +1042,69 @@ PreObama.US.v.Germany & 0.5113 \\
 ObamaEra.US.v.Germany & 0.857 \\
 \bottomrule()
 \end{longtable}
+
+The results from the two-sided t-tests, which indicated non-significant
+differences in mean YoY percent change in public low-carbon energy RD\&D
+spending between different time periods and between the United States
+and Germany, were unexpected and contrary to the initial hypotheses. The
+initial exploration of relationships using the raw budget data for both
+the United States and Germany suggested a significant distinction in
+U.S. lower-carbon energy RD\&D spending at the onset of Obama's two-term
+presidency.
+
+Regarding findings from the analysis of the first research question, the
+insignificant difference in mean YoY percent change in public
+lower-carbon energy RD\&D spending between the pre-Obama and Obama-era
+periods does not necessarily suggest that a substantial shift in funding
+priorities or levels of investment did not occur during Obama's
+presidency. The unexpected result (p-value = 0.5771), and failure to
+reject the null hypothesis, might be explained by the selection of the
+continuous dependent variable, mean year-over-year percent change in
+public lower-carbon energy RD\&D spending. After visualizing
+relationships in the raw data -- particularly the substantial low-carbon
+energy RDD budgetary swings starting in Obama's first year in office --
+statistical analysis focused on the average YoY percent change in
+spending. While this approach captures the overall direction \&
+magnitude of change in RD\&D spending, it smooths out short-term
+fluctuations over the selected time period and presents a less
+pronounced view of the trends. Thus, the analysis of the mean YoY
+percent change offset the potentially significant fluctuations that were
+initially explored rather than emphasizing specific annual variations in
+Obama's first years in office. Regardless, the low-carbon energy policy
+wins, particularly within Obama's first term, that underlay the original
+rationale affirm that it was a pivotal moment in the United States'
+transition towards renewable energy.
+
+Similarly, regarding the second and third research questions, the
+non-significant difference in mean YoY percent change in public
+lower-carbon energy RD\&D spending between the U.S. and Germany during
+both the pre-Obama (p-value of 0.5113) and Obama-era (p-value = 0.857)
+time periods contradicts the initial expectations. Failing to reject the
+null hypotheses, these findings indicate that the two countries had
+similar public investment trends in clean energy technologies,
+suggesting that factors other than the Obama Administration's policy
+interventions may have influenced changes in low-carbon RD\&D spending.
+Again, despite the divergent trends observed in the analysis, landmark
+policy such as the 2009 American Recovery and Reinvestment Act helps
+validate the original rationale and hypotheses that the Obama
+Administration marked a notable shift in sustainable energy funding
+priorities and investment levels.
+
+The unexpected findings from these analyses underscores the importance
+of further exploration to understand the underlying factors driving
+RD\&D spending in the United States and Germany. To gain a more
+comprehensive understanding of the significance of low-carbon RD\&D
+spending during Obama's two-term presidency, it would be beneficial to
+uncouple financial spending from environmental impact. While there was
+not a significant increase in low carbon energy investments during the
+Obama administration, this does not mean that there was not a
+significant change in environmental impact, such as a potential decrease
+in greenhouse gas emissions resulting from increased spending through
+the 2009 Recovery Act. Therefore, further literature review and research
+on the environmental impact stemming from increased funding through the
+Department of Energy may be beneficial to understanding the full
+magnitude the Obama Administration had on the transition towards lower
+carbon energy through RD\&D investment.
 
 \newpage
 
@@ -1051,8 +1140,65 @@ recommended for future analyses.
 
 \includegraphics{Chang_Jenkins_Mullens_ENV872_Final_files/figure-latex/Combined bar plot of US RDD-1.pdf}
 
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#plotting US and Germany data}
+\NormalTok{US.Germany.RDD.plot }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(US.and.Germany.RDD,}
+                              \FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ Date,}
+                                  \AttributeTok{y =}\NormalTok{ Percent.Change, }
+                                  \AttributeTok{color =}\NormalTok{ Country)) }\SpecialCharTok{+} 
+  \FunctionTok{geom\_line}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{geom\_smooth}\NormalTok{(}\AttributeTok{data =} \FunctionTok{subset}\NormalTok{(US.and.Germany.RDD, Country }\SpecialCharTok{==} \StringTok{"Germany"}\NormalTok{), }\AttributeTok{method =} \StringTok{"lm"}\NormalTok{, }\AttributeTok{se=}\ConstantTok{FALSE}\NormalTok{, }\AttributeTok{color=} \StringTok{"tomato2"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_smooth}\NormalTok{(}\AttributeTok{data =} \FunctionTok{subset}\NormalTok{(RDD.US.Eras, Country }\SpecialCharTok{==} \StringTok{"US"}\NormalTok{), }\AttributeTok{method =} \StringTok{"lm"}\NormalTok{, }\AttributeTok{se=}\ConstantTok{FALSE}\NormalTok{, }\AttributeTok{color=} \StringTok{"dodgerblue3"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_color\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{"tomato3"}\NormalTok{, }\StringTok{"darkblue"}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"YoY Change in Public Low{-}Carbon }\SpecialCharTok{\textbackslash{}n}\StringTok{ Energy RD\&D Spending: }\SpecialCharTok{\textbackslash{}n}\StringTok{ US vs. Germany"}\NormalTok{,}
+       \AttributeTok{y=}\StringTok{"Year{-}over{-}Year Percent Change"}\NormalTok{,}
+       \AttributeTok{x=}\StringTok{"Year"}\NormalTok{) }\SpecialCharTok{+} 
+  \FunctionTok{scale\_x\_date}\NormalTok{(}\AttributeTok{date\_breaks =} \StringTok{"2 years"}\NormalTok{, }\AttributeTok{date\_labels =} \StringTok{"\%Y"}\NormalTok{) }\SpecialCharTok{+}
+\NormalTok{  our\_theme }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{axis.text.x =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{angle =} \DecValTok{90}\NormalTok{, }\AttributeTok{vjust =} \FloatTok{0.5}\NormalTok{, }\AttributeTok{hjust=}\DecValTok{1}\NormalTok{))}
+  
+\FunctionTok{print}\NormalTok{(US.Germany.RDD.plot)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## `geom_smooth()` using formula = 'y ~ x'
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: Removed 1 rows containing non-finite values (`stat_smooth()`).
+\end{verbatim}
+
+\begin{verbatim}
+## `geom_smooth()` using formula = 'y ~ x'
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: Removed 1 rows containing non-finite values (`stat_smooth()`).
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: Removed 2 rows containing missing values (`geom_line()`).
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: Removed 2 rows containing missing values (`geom_point()`).
+\end{verbatim}
+
+\begin{figure}
+\centering
+\includegraphics{Chang_Jenkins_Mullens_ENV872_Final_files/figure-latex/visualizing the US and Germany data together-1.pdf}
+\caption{US and Germany Year over Year RDD Spending 1985 to 2015}
+\end{figure}
+
 \hypertarget{references}{%
 \section{References}\label{references}}
+
+Office of Electricity. (n.d.). 2009 American Recovery and Reinvestment
+Act. U.S. Department of Energy. Retrieved May 2, 2023, from
+\url{https://www.energy.gov/oe/2009-american-recovery-and-reinvestment-act}.
 
 \textless add references here if relevant, otherwise delete this
 section\textgreater{}
