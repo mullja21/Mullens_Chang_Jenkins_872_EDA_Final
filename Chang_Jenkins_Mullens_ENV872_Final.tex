@@ -76,6 +76,16 @@
 \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
 \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
 \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
 \usepackage{graphicx}
 \makeatletter
 \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
@@ -114,12 +124,13 @@
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same} % disable monospaced font for URLs
 \hypersetup{
-  pdftitle={Insert title of project here},
+  pdftitle={The Obama Administration's Significance on Public Low-Carbon Energy RD\&D Spending},
   pdfauthor={Irene Chang, Susanna Jenkins, and Jordan Mullens},
   hidelinks,
   pdfcreator={LaTeX via pandoc}}
 
-\title{Insert title of project here}
+\title{The Obama Administration's Significance on Public Low-Carbon
+Energy RD\&D Spending}
 \usepackage{etoolbox}
 \makeatletter
 \providecommand{\subtitle}[1]{% add subtitle to \maketitle
@@ -145,34 +156,111 @@
 \section{Rationale and Research
 Questions}\label{rationale-and-research-questions}}
 
-Question 1: Was the year-over-year change in public investment in
-lower-carbon energy RD\&D significant during the Obama administration?
+As the effects of climate change become more apparent, central and
+federal overnments have allocated more funding towards energy technology
+research, development, and demonstration (RD\&D). The general purpose of
+increased investment in low-carbon RD\&D is to move away from high
+greenhouse gas emitting energy sources, such as fossil fuels, which are
+a significant portion of anthropogenic emissions. Understanding how
+energy technology RD\&D has evolved over time will be an informative
+look into how the United States plans to address climate change through
+the transition to low-carbon energy.
+
+On the heels of the 2008 Financial Crisis, the newly inaugurated Obama
+Administration signed into law the 2009 American Recovery and
+Reinvestment Act (Recovery Act). While the main intent was to stimulate
+the US economy, the Department of Energy (DOE) was allocated 4.5 billion
+USD to modernize the electric power grid. Of that 4.5 billion USD, the
+Recovery Act allowed the DOE to invest 600 million USD, along with 900
+million USD industry cost share, in Smart Grid and Energy Storage
+Demonstrations (2009 American Recovery and Reinvestment Act, n.d.).
+
+For this analysis, low-carbon RD\&D spending in the US and Germany were
+examined during two time periods: 1985-2008 and 2009-2015. Due to the
+Recovery Act, we identified the Obama Administration (2009-2016) as a
+pivotal moment in the US transition towards low-carbon energy; however,
+the International Energy Agency dataset only provides US budget
+information up to 2015. Germany was utilized as a control because it is
+also a developed nation in the Western hemisphere. Therefore, we assume
+Germany would act in an economically similar manner towards their energy
+RD\&D pre-Obama Administration. The general trend of budgetary spending
+for both the US and Germany, pre-2009, could be similar year on year. To
+the best of our knowledge, Germany did not have any significant
+energy-related policy spending around 2009, so there could be a
+significant difference in low-carbon energy investment between the two
+countries during the 2009-2015 time period. The objective of this
+analysis is to gain valuable insight into how US investment into
+low-carbon energy has shifted during the Obama Administration.
+
+\textbf{Research Questions:}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  In the United States, was the difference in means between Pre-Obama
+  and Obama-era YoY percent change in public lower-carbon energy RD\&D
+  spending significant?
+\item
+  Prior to Obama's presidency (1985-2008), was mean YoY percent change
+  in public lower-carbon energy RD\&D spending in the United States
+  significantly distinct from Germany?
+\item
+  During Obama's presidency (2009-2015), was mean YoY percent change in
+  public lower-carbon energy RD\&D spending in the United States
+  significantly distinct from Germany?
+\end{enumerate}
 
 \newpage
 
 \hypertarget{dataset-information}{%
 \section{Dataset Information}\label{dataset-information}}
 
-The dataset utilized in this analysis was downloaded from International
-Energy Agency. The IEA's Energy Technology RD\&D (Research, Development,
-\& Demonstration) Budgets database provides spending information by
-energy technology in IEA countries from 1974 to 2022. Data is collected
-from central or federal government budgets and state-owned companies.
-Spending categories encompass renewables, nuclear power, fossil fuels,
-hydrogen, fuel cells, and energy efficiency.
+The dataset utilized in this analysis was downloaded from the
+International Energy Agency (IEA). The IEA's Energy Technology RD\&D
+Budgets database provides spending information by energy technology in
+IEA countries from 1974 to 2022. Data is collected from central or
+federal government budgets and state-owned companies. Spending
+categories (economic indicators) encompass renewables, nuclear power,
+fossil fuels, hydrogen, fuel cells, energy efficiency, unallocated, and
+total budget. There was public spending data on 32 countries and regions
+with varying degrees of completeness for the 1974-2022 timeframe. The
+budget data was available in various currencies, including Euros,
+national currencies, and USD.
 
-\newpage
+For this analysis, we wanted to consider low-carbon energy investments
+in the US and Germany from 1985-2015. After downloading and importing
+the dataset, columns were renamed, as the correct column names were
+imported as the first row of the dataset. Next, the dataset was filtered
+to only contain data for the United States and Germany from 1985-2015 in
+USD (2021 prices and exchange rates).
 
-\hypertarget{data-wrangling}{%
-\section{Data Wrangling}\label{data-wrangling}}
+In order to create a low carbon energy column, we further filtered the
+data to include total budget, fossil fuels, and unallocated. We then had
+to transpose the data as each year was its own column; however, we
+wanted a single year column with the data for each of the economic
+indicators to prepare the dataset for analysis. After filtering relevant
+data, we created a separate low carbon energy (Low.Carbon.Energy)
+column, which was total budget minus fossil fuel and unallocated. To
+account for the difference in budgets relative to economic capability,
+we normalized the budgets by creating another column for year-on-year
+growth of the low carbon energy budgets. After all these steps were
+taken, the data was considered ready for analysis.
 
-Downloaded the Energy Technology RD\&D (Research, Development, \&
-Demonstration) Budgets. After importing the data to GitHub and Rstudio,
-the raw dataset was wrangled to suit our analysis. A new data frame was
-created by extracting the desired years (1985-2015), currency (USD 2021
-prices and exchange rates), and economic indications (Total, Fossil
-Fuels, and Unallocated) for each country. A variable for year-over-year
-percentage (YoY) difference was created to normalize all comparisons.
+\hypertarget{table-summarizing-the-dataset-information}{%
+\subsection{Table summarizing the dataset
+information}\label{table-summarizing-the-dataset-information}}
+
+\begin{longtable}[]{@{}llll@{}}
+\toprule()
+Variable & Range\_Germany & Range\_US & Unit \\
+\midrule()
+\endhead
+Total.Spending. & 1780.5 & 9094.0 & USD (millions) \\
+Fossil.Fuel.Spending & 297.8 & 3919.8 & USD (millions) \\
+Low.Carbon.Spending & 1586.6 & 5175.0 & USD (millions) \\
+Year.over.Year.Change & 83.14 & 101.8. & \% change \\
+\bottomrule()
+\end{longtable}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -181,16 +269,14 @@ percentage (YoY) difference was created to normalize all comparisons.
   \FunctionTok{row\_to\_names}\NormalTok{(}\AttributeTok{row\_number =} \DecValTok{1}\NormalTok{)}
 
 \CommentTok{\#The column names were imported improperly. The first row contains the correct }
-\CommentTok{\#column names, so we used the janitor package since they have a function that }
+\CommentTok{\#column names, so we used the janitor package since it has a function that }
 \CommentTok{\#will replace the column names with the first row.}
-
 
 \NormalTok{RDD.countries }\OtherTok{\textless{}{-}}
   \FunctionTok{filter}\NormalTok{(RDD.newcolnames,}
 \NormalTok{         Country }\SpecialCharTok{==} \StringTok{"Germany"} \SpecialCharTok{|}\NormalTok{ Country }\SpecialCharTok{==} \StringTok{"United States"}\NormalTok{,}
 \NormalTok{         Currency }\SpecialCharTok{==} \StringTok{"USD (2021 prices and exchange rates)"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
   \FunctionTok{rename}\NormalTok{(}\StringTok{"Economic.Indicators"} \OtherTok{=} \StringTok{"Economic Indicators"}\NormalTok{)}
-
 
 \NormalTok{RDD.final }\OtherTok{\textless{}{-}}\NormalTok{ RDD.countries }\SpecialCharTok{\%\textgreater{}\%}
   \FunctionTok{filter}\NormalTok{(Economic.Indicators }\SpecialCharTok{==} \StringTok{"Total Budget"} \SpecialCharTok{|}\NormalTok{ Economic.Indicators }\SpecialCharTok{==} \StringTok{"Unallocated "} \SpecialCharTok{|}\NormalTok{ Economic.Indicators }\SpecialCharTok{==} \StringTok{"Fossil fuels"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
@@ -204,10 +290,10 @@ percentage (YoY) difference was created to normalize all comparisons.
 \FunctionTok{colnames}\NormalTok{(RDD.transpose) }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"Germany.FossilFuels"}\NormalTok{, }\StringTok{"Germany.Unallocated"}\NormalTok{, }\StringTok{"Germany.TotalBudget"}\NormalTok{, }\StringTok{"US.FossilFuels"}\NormalTok{, }\StringTok{"US.Unallocated"}\NormalTok{, }\StringTok{"US.TotalBudget"}\NormalTok{)}
 
 \NormalTok{RDD.transpose.rows }\OtherTok{\textless{}{-}}\NormalTok{ RDD.transpose[}\SpecialCharTok{!}\NormalTok{(}\FunctionTok{row.names}\NormalTok{(RDD.transpose) }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\StringTok{"Country"}\NormalTok{, }\StringTok{"Currency"}\NormalTok{, }\StringTok{"Economic.Indicators"}\NormalTok{)),]}
-
  
 \NormalTok{RDD.transpose.rows }\OtherTok{\textless{}{-}}\NormalTok{ RDD.transpose.rows }\SpecialCharTok{\%\textgreater{}\%}
   \FunctionTok{mutate\_at}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{6}\NormalTok{, as.numeric)}
+
 
 \CommentTok{\#creating frame for US Data}
 \NormalTok{RDD.US }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{Year=}\FunctionTok{c}\NormalTok{(}\StringTok{"1985"}\NormalTok{, }\StringTok{"1986"}\NormalTok{, }\StringTok{"1987"}\NormalTok{, }\StringTok{"1988"}\NormalTok{, }\StringTok{"1989"}\NormalTok{, }\StringTok{"1990"}\NormalTok{, }\StringTok{"1991"}\NormalTok{, }\StringTok{"1992"}\NormalTok{, }\StringTok{"1993"}\NormalTok{, }\StringTok{"1994"}\NormalTok{, }\StringTok{"1995"}\NormalTok{, }\StringTok{"1996"}\NormalTok{, }\StringTok{"1997"}\NormalTok{, }\StringTok{"1998"}\NormalTok{, }\StringTok{"1999"}\NormalTok{, }\StringTok{"2000"}\NormalTok{, }\StringTok{"2001"}\NormalTok{, }\StringTok{"2002"}\NormalTok{, }\StringTok{"2003"}\NormalTok{, }\StringTok{"2004"}\NormalTok{, }\StringTok{"2005"}\NormalTok{, }\StringTok{"2006"}\NormalTok{, }\StringTok{"2007"}\NormalTok{, }\StringTok{"2008"}\NormalTok{, }\StringTok{"2009"}\NormalTok{, }\StringTok{"2010"}\NormalTok{, }\StringTok{"2011"}\NormalTok{, }\StringTok{"2012"}\NormalTok{, }\StringTok{"2013"}\NormalTok{, }\StringTok{"2014"}\NormalTok{, }\StringTok{"2015"}\NormalTok{), }
@@ -324,6 +410,11 @@ percentage (YoY) difference was created to normalize all comparisons.
 \FunctionTok{head}\NormalTok{(US.and.Germany.RDD)}
 \end{Highlighting}
 \end{Shaded}
+
+The data was reviewed holistically to understand general trends between
+1985 and 2015 for both the United States and Germany. Summary statistics
+by country for each energy type and total budget are listed in the
+tables below:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -829,11 +920,7 @@ investments to Germany's within the same time period.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{\# T{-}test \#1) U.S. Public Low{-}Carbon Energy RD\&D Spending: Pre{-}Obama (1985{-}2008) vs. during Obama Administration (2009{-}2015)}
-
-        \CommentTok{\#Alternative hypothesis == YoY change in public spending on lower{-}carbon energy RD\&D is significant during Obama administration}
-
-        \CommentTok{\#Run two{-}sample T{-}test on US RDD "Eras" data to determine if mean YoY change in investment is the same or different before vs. during Obama admin}
+\CommentTok{\#United States Pre{-}Obama vs Obama{-}era analysis}
 
 \NormalTok{US.Pre.v.Post.Obama.ttest }\OtherTok{\textless{}{-}} \FunctionTok{t.test}\NormalTok{(RDD.US.Eras}\SpecialCharTok{$}\NormalTok{Percent.Change }\SpecialCharTok{\textasciitilde{}} 
 \NormalTok{                                      RDD.US.Eras}\SpecialCharTok{$}\NormalTok{Era)}
@@ -858,15 +945,7 @@ investments to Germany's within the same time period.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-         \CommentTok{\#The p{-}value is 0.5771 which is greater than 0.05 so we must accept our null hypothesis. Therefore, mean year{-}over{-}year change in public low{-}carbon RD\&D spending during the Obama presidency (2009{-}2015) was not statistically distinct from the Pre{-}Obama era (1985{-}2008) YoY spending change.}
-
-\CommentTok{\#{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}}
-  
-\CommentTok{\# T{-}test \#2) Pre{-}Obama Public Low{-}Carbon RD\&D Spending (1985{-}2008): U.S. vs Germany }
-
-         \CommentTok{\#Alternative hypothesis == Prior to Obama\textquotesingle{}s inauguration (in the period spanning 1985{-}2008), the mean YoY change in public low{-}carbon RDD spending in the United States is not statistically distinct from Germany\textquotesingle{}s mean YoY change in public spending   }
-    
-          \DocumentationTok{\#\#\^{} this hypothesis would mean that our null hypothesis is: prior to obama admin, the mean YoY change in public low{-}carbon RDD spending in the United States IS statistically distinct from germany  }
+\CommentTok{\#Pre{-}Obama US vs Germany analysis}
 
 \NormalTok{Pre.}\FloatTok{2009.}\NormalTok{US.Germany.RDD }\OtherTok{\textless{}{-}} \FunctionTok{filter}\NormalTok{(US.and.Germany.RDD, Year }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\DecValTok{1985}\SpecialCharTok{:}\DecValTok{2008}\NormalTok{))}
   
@@ -893,15 +972,7 @@ investments to Germany's within the same time period.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-      \CommentTok{\#The p{-}value is 0.5113 which is greater than 0.05 so we must accept our null hypothesis. Therefore, in the period prior to Obama\textquotesingle{}s presidency (1985{-}2008), the mean year{-}over{-}year change in public low{-}carbon RD\&D spending in the U.S. was statistically distinct from Germany.}
-    
-      \CommentTok{\#NOTES FROM GOOGLE RE: NULL: If the p{-}value is below your threshold of significance (typically p \textless{} 0.05), then you can reject the null hypothesis, but this does not necessarily mean that your alternative hypothesis is true.}
-
-\CommentTok{\#{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}}
-  
-\CommentTok{\# T{-}test \#3) Obama{-}era Public Low{-}carbon RD\&D Spending (2009{-}2015): United States vs. Germany}
-
-            \DocumentationTok{\#\#Alternative Hypothesis == during the Obama presidency (2009{-}2015), the mean YoY change in public low{-}carbon RDD spending in the United States was statistically distinct from the mean YoY change in Germany }
+\CommentTok{\#Obama{-}era US vs Germany analysis}
 
 \NormalTok{Post.}\FloatTok{2009.}\NormalTok{US.Germany.RDD }\OtherTok{\textless{}{-}} \FunctionTok{filter}\NormalTok{(US.and.Germany.RDD, Year }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\DecValTok{2009}\SpecialCharTok{:}\DecValTok{2015}\NormalTok{))}
   
@@ -926,16 +997,25 @@ investments to Germany's within the same time period.
 ##              5.665790              8.169596
 \end{verbatim}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-          \CommentTok{\#The p{-}value is 0.857 which is greater than 0.05 so the null hypothesis is accepted. Therefore, Obama{-}era (2009{-}2015) mean year{-}over{-}year change in public low{-}carbon RD\&D spending in the U.S. was not statistically distinct from Germany.}
-\end{Highlighting}
-\end{Shaded}
-
 \newpage
 
 \hypertarget{summary-and-conclusions}{%
 \section{Summary and Conclusions}\label{summary-and-conclusions}}
+
+\hypertarget{list-of-p-values-from-two-sided-t-test-analyses.}{%
+\subsection{List of p-values from two-sided t-test
+analyses.}\label{list-of-p-values-from-two-sided-t-test-analyses.}}
+
+\begin{longtable}[]{@{}ll@{}}
+\toprule()
+Analysis & p\_value \\
+\midrule()
+\endhead
+US.PreObama.v.ObamaEra & 0.5771 \\
+PreObama.US.v.Germany & 0.5113 \\
+ObamaEra.US.v.Germany & 0.857 \\
+\bottomrule()
+\end{longtable}
 
 \newpage
 

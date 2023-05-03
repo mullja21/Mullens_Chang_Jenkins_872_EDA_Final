@@ -2,6 +2,8 @@
 title: "The Obama Administration's Significance on Public Low-Carbon Energy RD&D Spending"
 author: "Irene Chang, Susanna Jenkins, and Jordan Mullens"
 output:
+  html_document:
+    df_print: paged
   pdf_document:
     keep_tex: yes
     fig_caption: yes
@@ -64,39 +66,39 @@ RDD.raw <- read.csv("./Raw_Data/Public_RDD_Spending_All_Countries.csv")
 
 # Rationale and Research Questions
 
-Question 1: Was the year-over-year change in public investment in
-lower-carbon energy RD&D significant during the Obama administration?
+As the effects of climate change become more apparent, central and federal governments have allocated more funding towards energy technology research, development, and demonstration (RD&D). The general purpose of increased investment in low-carbon RD&D is to move away from high greenhouse gas emitting energy sources, such as fossil fuels, which are a significant portion of anthropogenic emissions. Understanding how energy technology RD&D has evolved over time will be an informative look into how the United States plans to address climate change through the transition to low-carbon energy.  
+
+On the heels of the 2008 Financial Crisis, the newly inaugurated Obama Administration signed into law the 2009 American Recovery and Reinvestment Act (Recovery Act). While the main intent was to stimulate the US economy, the Department of Energy (DOE) was allocated 4.5 billion USD to modernize the electric power grid. Of that 4.5 billion USD, the Recovery Act allowed the DOE to invest 600 million USD, along with 900 million USD industry cost share, in Smart Grid and Energy Storage Demonstrations (2009 American Recovery and Reinvestment Act, n.d.).  
+
+For this analysis, low-carbon RD&D spending in the US and Germany were examined during two time periods: 1985-2008 and 2009-2015. Due to the Recovery Act, we identified the Obama Administration (2009-2016) as a pivotal moment in the US transition towards low-carbon energy; however, the International Energy Agency dataset only provides US budget information up to 2015. Germany was utilized as a control because it is also a developed nation in the Western hemisphere. Therefore, we assume Germany would act in an economically similar manner towards their energy RD&D pre-Obama Administration. The general trend of budgetary spending for both the US and Germany, pre-2009, could be similar year on year. To the best of our knowledge, Germany did not have any significant energy-related policy spending around 2009, so there could be a significant difference in low-carbon energy investment between the two countries during the 2009-2015 time period. The objective of this analysis is to gain valuable insight into how US investment into low-carbon energy has shifted during the Obama Administration. 
+
+**Research Questions:** 
+
+1. In the United States, was the difference in means between Pre-Obama and Obama-era YoY percent change in public lower-carbon energy RD&D spending significant? 
+
+2. Prior to Obama’s presidency (1985-2008), was mean YoY percent change in public lower-carbon energy RD&D spending in the United States significantly distinct from Germany? 
+
+3. During Obama’s presidency (2009-2015), was mean YoY percent change in public lower-carbon energy RD&D spending in the United States significantly distinct from Germany? 
 
 \newpage
 
 # Dataset Information
 
-The dataset utilized in this analysis was downloaded from International
-Energy Agency. The IEA's Energy Technology RD&D (Research, Development,
-& Demonstration) Budgets database provides spending information by
-energy technology in IEA countries from 1974 to 2022. Data is collected
-from central or federal government budgets and state-owned companies.
-Spending categories encompass renewables, nuclear power, fossil fuels,
-hydrogen, fuel cells, and energy efficiency.
+The dataset utilized in this analysis was downloaded from the International Energy Agency (IEA). The IEA's Energy Technology RD&D Budgets database provides spending information by energy technology in IEA countries from 1974 to 2022. Data is collected from central or federal government budgets and state-owned companies. Spending categories (economic indicators) encompass renewables, nuclear power, fossil fuels, hydrogen, fuel cells, energy efficiency, unallocated, and total budget. There was public spending data on 32 countries and regions with varying degrees of completeness for the 1974-2022 timeframe. The budget data was available in various currencies, including Euros, national currencies, and USD.  
 
-## Table summarizing the dataset structure
+For this analysis, we wanted to consider low-carbon energy investments in the US and Germany from 1985-2015. After downloading and importing the dataset, columns were renamed, as the correct column names were imported as the first row of the dataset. Next, the dataset was filtered to only contain data for the United States and Germany from 1985-2015 in USD (2021 prices and exchange rates).  
 
-| Variable              | Range_Germany | Range_US | Unit |
-|-----------------------|---------------|----------|------|
-| Total.Spending.       | 1780.5        | 9094.0   | USD  |
-| Fossil.Fuel.Spending  | 297.8         | 3919.8   | USD  |
-| Low.Carbon.Spending   | 1586.6        |  5175.0  | USD  |
-| Year.over.Year.Change | 83.14         | 101.8.   | USD  |
+In order to create a low carbon energy column, we further filtered the data to include total budget, fossil fuels, and unallocated. We then had to transpose the data as each year was its own column; however, we wanted a single year column with the data for each of the economic indicators to prepare the dataset for analysis. After filtering relevant data, we created a separate low carbon energy (Low.Carbon.Energy) column, which was total budget minus fossil fuel and unallocated. To account for the difference in budgets relative to economic capability, we normalized the budgets by creating another column for year-on-year growth of the low carbon energy budgets. After all these steps were taken, the data was considered ready for analysis. 
 
-# Data Wrangling
+## Table summarizing the dataset information
 
-Downloaded the Energy Technology RD&D (Research, Development, &
-Demonstration) Budgets. After importing the data to GitHub and Rstudio,
-the raw dataset was wrangled to suit our analysis. A new data frame was
-created by extracting the desired years (1985-2015), currency (USD 2021
-prices and exchange rates), and economic indications (Total, Fossil
-Fuels, and Unallocated) for each country. A variable for year-over-year
-percentage (YoY) difference was created to normalize all comparisons.
+| Variable              | Range_Germany | Range_US | Unit            |
+|-----------------------|---------------|----------|-----------------|
+| Total.Spending.       | 1780.5        | 9094.0   | USD (millions)  |
+| Fossil.Fuel.Spending  | 297.8         | 3919.8   | USD (millions)  |
+| Low.Carbon.Spending   | 1586.6        | 5175.0   | USD (millions)  |
+| Year.over.Year.Change | 83.14         | 101.8.   | % change        |
+
 
 ```{r dataset wrangling}
 #create new data frame, change column names
@@ -104,16 +106,14 @@ RDD.newcolnames <- RDD.raw %>%
   row_to_names(row_number = 1)
 
 #The column names were imported improperly. The first row contains the correct 
-#column names, so we used the janitor package since they have a function that 
+#column names, so we used the janitor package since it has a function that 
 #will replace the column names with the first row.
-
 
 RDD.countries <-
   filter(RDD.newcolnames,
          Country == "Germany" | Country == "United States",
          Currency == "USD (2021 prices and exchange rates)") %>%
   rename("Economic.Indicators" = "Economic Indicators")
-
 
 RDD.final <- RDD.countries %>%
   filter(Economic.Indicators == "Total Budget" | Economic.Indicators == "Unallocated " | Economic.Indicators == "Fossil fuels") %>%
@@ -127,10 +127,10 @@ RDD.transpose <- data.frame(t(RDD.final))
 colnames(RDD.transpose) <- c("Germany.FossilFuels", "Germany.Unallocated", "Germany.TotalBudget", "US.FossilFuels", "US.Unallocated", "US.TotalBudget")
 
 RDD.transpose.rows <- RDD.transpose[!(row.names(RDD.transpose) %in% c("Country", "Currency", "Economic.Indicators")),]
-
  
 RDD.transpose.rows <- RDD.transpose.rows %>%
   mutate_at(1:6, as.numeric)
+
 
 #creating frame for US Data
 RDD.US <- data.frame(Year=c("1985", "1986", "1987", "1988", "1989", "1990", "1991", "1992", "1993", "1994", "1995", "1996", "1997", "1998", "1999", "2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015"), 
@@ -201,6 +201,8 @@ head(US.and.Germany.RDD)
 
 ```
 
+The data was reviewed holistically to understand general trends between 1985 and 2015 for both the United States and Germany. Summary statistics by country for each energy type and total budget are listed in the tables below: 
+
 ```{r calculating the summary statistics for US and Germany and creating tables}
 #creating Germany Data summary
 Germ.summary <- US.and.Germany.RDD %>%
@@ -230,7 +232,6 @@ kable(US.Obama.summary, caption = "Summary Statistics for Obama administration")
 
 ```
 
-
 ```{r Line Plot of All US RDD, fig.cap= "US RDD Spending 1985 to 2015"}
 #US Line Plot
 RDD.US.Eras.Line.plot <- ggplot(RDD.US.Eras, aes(x = Date)) +
@@ -251,6 +252,7 @@ RDD.US.Eras.Line.plot <- ggplot(RDD.US.Eras, aes(x = Date)) +
 print(RDD.US.Eras.Line.plot)
 
 ```
+
 
 ```{r Germany and US Line Plot for total budget, fig.cap= "US and Germany Total RDD Spending 1985 to 2015. Line graph used to visualize potential trends."}
 # Germ and US Line Plot
@@ -326,8 +328,6 @@ print(US.Germ.Fossil.fuel.Bar.plot)
 ```
 
 
-
-
 ```{r Low Carbon Germ and US Line Plot, fig.cap= "US and Germany Low Carbon Spending 1985 to 2015. Line graph used to visualize potential trends."}
 #Low Carbon Germ and US Line Plot
 US.Germ.lowC.plot <- ggplot(US.and.Germany.RDD,
@@ -345,8 +345,6 @@ US.Germ.lowC.plot <- ggplot(US.and.Germany.RDD,
 print(US.Germ.lowC.plot)
 
 ```
-
-
 
 
 
@@ -370,12 +368,21 @@ print(US.Germ.low.carbon.Bar.plot)
 
 # Analysis
 
-Our analysis of this dataset focuses on comparing the mean investment
-YoY difference of the Pre-Obama era and the mean investment YoY
-difference of the Obama era. However, we need to ensure any changes in
-investment is unique to the Obama administration and not occurring
-globally. Therefore, we will also utilize t-tests to compare US
-investments to Germany's within the same time period.
+The analysis of the RD&D Budget data focuses on comparing the mean year-over-year (YoY) percent change in public low-carbon energy RD&D spending in the period preceding Obama’s presidency (1985-2008) to the YoY percent change during Obama’s presidency (2009-2015). To ensure any Obama-era changes in public low-carbon RD&D investment within the United States are unique to the administration & its domestic energy policy agenda, and not co-occurring with global shifts in public RD&D investment, trend significance in the United States was compared to the control, Germany.  To analyze these trends statistically, rather than visually, a series of two-sample t-tests was employed using the RDD.US.Eras data frame and filtered US.and.Germany.RDD data frame to separately address the three research questions. 
+
+## United States Pre-Obama vs. Obama-era Analysis 
+
+**Question 1:** In the United States, was the difference in means between Pre-Obama and Obama-era year-over-year percent change in public lower-carbon energy RD&D spending significant? 
+
+In the first two-sample t-test, we addressed the first research question by looking at public low-carbon energy RD&D spending in the United States using RDD.US.Eras data frame to determine if the mean YoY percent change prior to Obama’s presidency (1985-2008) was as significant as the mean YoY percent change during the Obama administration (2009-2015).  RDD.US.Eras$Percent.Change was the continuous dependent variable, and RDD.US.Eras$Era was the categorical variable with two levels (Pre-Obama and Obama-era). 
+ 
+* **Null Hypothesis 1 (H₀):** Mean YoY change in public low-carbon RD&D spending during the Obama presidency (2009-2015) was not statistically distinct from the Pre-Obama era (1985-2008) YoY change in spending 
+
+* **Alternative Hypothesis 1 (H₁):** Mean YoY change in public spending on lower-carbon energy RD&D was significantly different during Obama’s presidency.  
+
+The test returned a p-value of 0.5771 which is above our threshold of significance (p < 0.05). Therefore, we fail to reject our null hypothesis (H₀) that mean YoY change in public low-carbon RD&D spending during the Obama presidency (2009-2015) was not statistically distinct from the Pre-Obama era (1985-2008) YoY change in spending. 
+
+Figure XXXXX displays the year over year percent change in low carbon energy RD&D for both the pre-Obama and Obama time periods. A linear regression was constructed and added to the YoY lines to examine the data trends over time.  
 
 ```{r visualizing the US data, fig.cap= "US Year over Year RDD Spending 1985 to 2015"}
 #plotting the pre-Obama data
@@ -400,33 +407,20 @@ print(RDD.US.Eras.plot)
 
 ```
 
-```{r visualizing the US and Germany data together, fig.cap= "US and Germany Year over Year RDD Spending 1985 to 2015"}
-#plotting the data
-US.Germany.RDD.plot <- ggplot(US.and.Germany.RDD,
-                              aes(x = Date,
-                                  y = Percent.Change, 
-                                  color = Country)) + 
-  geom_line() +
-  geom_point() +
-  geom_smooth(data = subset(US.and.Germany.RDD, Country == "Germany"), method = "lm", se=FALSE, color= "tomato2") +
-  geom_smooth(data = subset(RDD.US.Eras, Country == "US"), method = "lm", se=FALSE, color= "dodgerblue3") +
-  scale_color_manual(values = c("tomato3", "darkblue")) +
-  labs(title = "YoY Change in Public Low-Carbon \n Energy RD&D Spending: \n US vs. Germany",
-       y="Year-over-Year Percent Change",
-       x="Year") + 
-  scale_x_date(date_breaks = "2 years", date_labels = "%Y") +
-  our_theme +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
-  
-print(US.Germany.RDD.plot)
 
-```
+## Pre-Obama United States vs. Germany Analysis 
 
+**Question 2:** Prior to Obama’s presidency (1985-2008), was mean year-over-year percent change in public lower-carbon energy RD&D spending in the United States significantly distinct from Germany? 
 
+To address the second question regarding pre-Obama spending in U.S. and Germany, we needed to wrangle the data to only include records prior to Obama’s inauguration, for years 1985-2008. We then ran a two-sample T-test on the filtered pre-Obama data to determine whether mean YoY percent change in public RD&D spending was statistically different between the two counties.  Pre.2009.US.Germany.RDD$Percent.Change was the continuous dependent variable, and Pre.2009.US.Germany.RDD$Country was the categorical variable with two levels (United States and Germany). 
 
+* **Null Hypothesis 2 (H₀):** Prior to Obama’s presidency, there was a significant difference in means between the U.S. and Germany for YoY percent change in public spending on lower-carbon energy RD&D  
 
+* **Alternative Hypothesis 2 (H₁):** The difference in means between the U.S. and Germany for YoY percent change in public spending on lower-carbon energy RD&D was not significant prior to Obama’s presidency 
 
+Our test returned a p-value of 0.5113 which is above the threshold of significance (p < 0.05). Therefore, we fail to reject the null hypothesis (H₀) that in the period prior to Obama's presidency (1985-2008), mean year-over-year change in public low-carbon RD&D spending in the United States was statistically distinct from Germany. 
 
+Figure XXX displays the year over year percent change in low carbon energy RDD for the US and Germany during the pre-Obama administration time period. A linear regression was constructed and added to the YoY lines to examine the data trends over time. 
 
 ```{r visualizing the pre US and Germany data together, fig.cap= "US and Germany Year over Year RDD Spending 1985 to 2008"}
 #plotting the data
@@ -451,6 +445,21 @@ print(US.Germany.RDD.pre.plot)
 
 ```
 
+
+## Obama-era United States vs. Germany Analysis 
+
+**Question 3:** During Obama’s presidency (2009-2015), was mean year-over-year percent change in public lower-carbon energy RD&D spending in the United States significantly distinct from Germany? 
+
+We then conducted a similar two-sided t-test to address the third question regarding Obama-era spending in the U.S. and Germany. After wrangling the data to only include records during Obama’s two-term presidency, for years 2009-2015, we ran the analysis on the filtered data to determine whether mean YoY percent change in Obama-era public RD&D spending was statistically different between the two counties. Post.2009.US.Germany.RDD$Percent.Change was the continuous dependent variable, and Post.2009.US.Germany.RDD$Country was the categorical variable with two levels (United States and Germany). 
+
+* **Null Hypothesis 3 (H₀):** During Obama’s presidency, mean YoY percent change in public spending on lower-carbon energy RD&D in the United States was not statistically distinct from Germany YoY change in spending 
+
+* **Alternative Hypothesis 3 (H₁):** Obama-era YoY percent change in public lower-carbon energy RD&D spending in the United States was significantly different from Germany YoY change in spending 
+
+The final two-sided t-test returned a p-value of 0.857 which is above the threshold of significance (p < 0.05). Therefore, we fail to reject the null hypothesis (H₀) that mean YoY change in public low-carbon RD&D spending in the U.S. was not statistically distinct from Germany during the Obama Administration. 
+
+Figure XXXXXX displays the year over year percent change in low carbon energy RDD for the US and Germany during the Obama administration time period. A linear regression was constructed and added to the YoY lines to examine the data trends over time. 
+
 ```{r visualizing Obama US and Germany data together, fig.cap= "US and Germany Year over Year RDD Spending 2009 to 2015"}
 #plotting the data
 US.Germany.RDD.Obama.plot <- US.and.Germany.RDD %>%
@@ -473,7 +482,6 @@ US.Germany.RDD.Obama.plot <- US.and.Germany.RDD %>%
 print(US.Germany.RDD.Obama.plot)
 
 ```
-
 
 
 ```{r conducting 3 ttests}
@@ -511,7 +519,7 @@ Post.2009.US.Germany.ttest
 
 # Summary and Conclusions
 
-## List of p-values from two-sided t-test analyses.
+**List of p-values from two-sided t-test analyses.**
 
 | Analysis                  |  p_value      |
 |---------------------------|---------------|
@@ -519,16 +527,25 @@ Post.2009.US.Germany.ttest
 | PreObama.US.v.Germany     |  0.5113       | 
 | ObamaEra.US.v.Germany     |  0.857        |
 
+
+The results from the two-sided t-tests, which indicated non-significant differences in mean YoY percent change in public low-carbon energy RD&D spending between different time periods and between the United States and Germany, were unexpected and contrary to the initial hypotheses. The initial exploration of relationships using the raw budget data for both the United States and Germany suggested a significant distinction in U.S. lower-carbon energy RD&D spending at the onset of Obama’s two-term presidency.  
+
+Regarding findings from the analysis of the first research question, the insignificant difference in mean YoY percent change in public lower-carbon energy RD&D spending between the pre-Obama and Obama-era periods does not necessarily suggest that a substantial shift in funding priorities or levels of investment did not occur during Obama’s presidency. The unexpected result (p-value = 0.5771), and failure to reject the null hypothesis, might be explained by the selection of the continuous dependent variable, mean year-over-year percent change in public lower-carbon energy RD&D spending. After visualizing relationships in the raw data – particularly the substantial low-carbon energy RDD budgetary swings starting in Obama’s first year in office – statistical analysis focused on the average YoY percent change in spending. While this approach captures the overall direction & magnitude of change in RD&D spending, it smooths out short-term fluctuations over the selected time period and presents a less pronounced view of the trends. Thus, the analysis of the mean YoY percent change offset the potentially significant fluctuations that were initially explored rather than emphasizing specific annual variations in Obama’s first years in office. Regardless, the low-carbon energy policy wins, particularly within Obama’s first term, that underlay the original rationale affirm that it was a pivotal moment in the United States’ transition towards renewable energy. 
+
+Similarly, regarding the second and third research questions, the non-significant difference in mean YoY percent change in public lower-carbon energy RD&D spending between the U.S. and Germany during both the pre-Obama (p-value of 0.5113) and Obama-era (p-value = 0.857) time periods contradicts the initial expectations. Failing to reject the null hypotheses, these findings indicate that the two countries had similar public investment trends in clean energy technologies, suggesting that factors other than the Obama Administration’s policy interventions may have influenced changes in low-carbon RD&D spending. Again, despite the divergent trends observed in the analysis, landmark policy such as the 2009 American Recovery and Reinvestment Act helps validate the original rationale and hypotheses that the Obama Administration marked a notable shift in sustainable energy funding priorities and investment levels. 
+
+The unexpected findings from these analyses underscores the importance of further exploration to understand the underlying factors driving RD&D spending in the United States and Germany. To gain a more comprehensive understanding of the significance of low-carbon RD&D spending during Obama's two-term presidency, it would be beneficial to uncouple financial spending from environmental impact. While there was not a significant increase in low carbon energy investments during the Obama administration, this does not mean that there was not a significant change in environmental impact, such as a potential decrease in greenhouse gas emissions resulting from increased spending through the 2009 Recovery Act. Therefore, further literature review and research on the environmental impact stemming from increased funding through the Department of Energy may be beneficial to understanding the full magnitude the Obama Administration had on the transition towards lower carbon energy through RD&D investment. 
+
 \newpage
 
-#Scripts, data and code The repository linked at the beginning contains
-both the raw data, wrangled data, and code utilized. They are found in
+
+
+#Scripts, data and code 
+The repository linked at the beginning contains both the raw data, wrangled data, and code utilized. They are found in
 their respective folders.
 
-#Quality assurance Please note that any conclusions created by this
-report are limited as only one source of data and one variable were
-utilized. Further examination of additional metrics and countries are
-recommended for future analyses.
+#Quality assurance 
+Please note that any conclusions created by this report are limited as only one source of data and one variable were utilized. Further examination of additional metrics and countries are recommended for future analyses.
 
 \newpage
 
@@ -550,6 +567,32 @@ print(RDD.US.Eras.Bar.plot)
 
 ```
 
+
+```{r visualizing the US and Germany data together, fig.cap= "US and Germany Year over Year RDD Spending 1985 to 2015"}
+#plotting US and Germany data
+US.Germany.RDD.plot <- ggplot(US.and.Germany.RDD,
+                              aes(x = Date,
+                                  y = Percent.Change, 
+                                  color = Country)) + 
+  geom_line() +
+  geom_point() +
+  geom_smooth(data = subset(US.and.Germany.RDD, Country == "Germany"), method = "lm", se=FALSE, color= "tomato2") +
+  geom_smooth(data = subset(RDD.US.Eras, Country == "US"), method = "lm", se=FALSE, color= "dodgerblue3") +
+  scale_color_manual(values = c("tomato3", "darkblue")) +
+  labs(title = "YoY Change in Public Low-Carbon \n Energy RD&D Spending: \n US vs. Germany",
+       y="Year-over-Year Percent Change",
+       x="Year") + 
+  scale_x_date(date_breaks = "2 years", date_labels = "%Y") +
+  our_theme +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+  
+print(US.Germany.RDD.plot)
+
+```
+
+
 # References
+
+Office of Electricity. (n.d.). 2009 American Recovery and Reinvestment Act. U.S. Department of Energy. Retrieved May 2, 2023, from https://www.energy.gov/oe/2009-american-recovery-and-reinvestment-act. 
 
 \<add references here if relevant, otherwise delete this section\>
