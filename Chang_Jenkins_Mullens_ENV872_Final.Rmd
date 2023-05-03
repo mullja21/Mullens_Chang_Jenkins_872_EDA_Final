@@ -2,12 +2,11 @@
 title: "Insert title of project here"
 author: "Irene Chang, Susanna Jenkins, and Jordan Mullens"
 output:
-  html_document:
-    df_print: paged
   pdf_document:
     keep_tex: yes
     fig_caption: yes
     number_sections: yes
+    df_print: paged
 subtitle: https://github.com/mullja21/Mullens_Chang_Jenkins_872_EDA_Final.git
 geometry: margin=2.54cm
 fontsize: 12pt
@@ -40,6 +39,10 @@ library(agricolae)
 library(ggplot2)
 library(lubridate)
 library(janitor)
+library(knitr)
+library(kableExtra)
+
+
 
 # Set your ggplot theme
 library(ggthemes)
@@ -89,6 +92,15 @@ created by extracting the desired years (1985-2015), currency (USD 2021
 prices and exchange rates), and economic indications (Total, Fossil
 Fuels, and Unallocated) for each country. A variable for year-over-year
 percentage (YoY) difference was created to normalize all comparisons.
+
+| Variable             | Range_Germany | Range_US | Unit |
+|----------------------|---------------|----------|------|
+| Total.Spending.      |  1780.5       | 9094.0   | USD  |
+| Fossil.Fuel.Spending | 297.8         | 3919.8   | USD  |
+| Low.Carbon.Spending  | 1586.6        |  5175.0  | USD  |
+|Year.over.Year.Change | 83.14         | 101.8.   | USD  |
+
+
 
 ```{r dataset wrangling}
 #create new data frame, change column names
@@ -182,68 +194,63 @@ write.csv(RDD.US.Eras, row.names = FALSE, file = "./Processed_Data/US.Eras.RDD.c
 ```{r Exploring dimensions of the wrangled data set}
 
 #US Data Set
-dim(RDD.US)
-colnames(RDD.US)
-head(RDD.US)
+dim(RDD.US.Eras)
+colnames(RDD.US.Eras)
+head(RDD.US.Eras)
 
 #US and Germany
+dim(US.and.Germany.RDD)
+colnames(US.and.Germany.RDD)
+head(US.and.Germany.RDD)
 
 ```
 
-
-```{r calculating the summary statistics for US and Germany}
-
+```{r calculating the summary statistics for US and Germany and creating tables}
+#creating Germany Data summary
 Germ.summary <- US.and.Germany.RDD %>%
   filter(Country== "Germany") %>%
+  select(Fossil.Fuel, Low.Carbon.Energy, Total.Budget, Percent.Change) %>%
   summary()
-print(Germ.summary)
 
+kable(Germ.summary, caption = "Summary Statistics for Germany")
+
+#creating US Pre Obama summary
 US.Pre.summary <- US.and.Germany.RDD %>%
   filter(Country== "US") %>%
   filter(Era== "Pre") %>%
+  select(Fossil.Fuel, Low.Carbon.Energy, Total.Budget, Percent.Change) %>%
   summary()
-print(US.Pre.summary)
 
+kable(US.Pre.summary, caption = "Summary Statistics for US pre-Obama administration")
+
+#creating Obama admin summary
 US.Obama.summary <- US.and.Germany.RDD %>%
   filter(Country== "US") %>%
   filter(Era== "Obama") %>%
+  select(Fossil.Fuel, Low.Carbon.Energy, Total.Budget, Percent.Change) %>%
   summary()
-print(US.Obama.summary)
+
+kable(US.Obama.summary, caption = "Summary Statistics for Obama administration")
+
+
 
 ```
 
 
-
-```{r Combined bar plot of US RDD}
-# Create the combined bar plot
-RDD.US.Eras.Bar.plot <- ggplot(RDD.US.Eras, aes(x = Year)) +
-  geom_bar(aes(y = Total.Budget, fill = "Total.budget"), stat= "identity", position = "identity") +
-  geom_bar(aes(y = Low.Carbon.Energy, fill = "Low.Carbon"), stat= "identity", position = "identity") +
-  geom_bar(aes(y = Fossil.Fuel, fill = "Fossil.Fuels"), stat= "identity", position = "identity") +
-  scale_fill_manual(values = c("Fossil.Fuels" = "midnightblue", "Low.Carbon" = "darkolivegreen3", "Total.budget" = "sienna3")) +
-  labs(fill = "Budget Portion")+
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
-  labs(title = "Proportion of RDD Spending",
-       y="Amount in USD (2021 \n Pricess and Exchange Rates)",
-       x="Year")
-print(RDD.US.Eras.Bar.plot)
-
-```
-
-```{r Line Plot of All US RDD}
+```{r Line Plot of All US RDD, fig.cap= "US RDD Spending 1985 to 2015"}
 #US Line Plot
 RDD.US.Eras.Line.plot <- ggplot(RDD.US.Eras, aes(x = Date)) +
-  geom_line(aes(y = Total.Budget, color= "Total.budget")) +
+  geom_line(aes(y = Total.Budget, color= "Total.Spending")) +
   geom_line(aes(y = Fossil.Fuel, color= "Fossil.Fuels")) +
   geom_line(aes(y = Low.Carbon.Energy, color= "Low.Carbon")) +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1, size = 9)) +
   scale_color_manual(name = "Proportion of \n RDD Spending", values= c(
     "Fossil.Fuels" = "midnightblue", 
     "Low.Carbon" = "darkolivegreen3", 
-    "Total.budget" = "sienna3")) +
+    "Total.Spending" = "sienna3")) +
   scale_x_date(date_breaks = "3 years", date_labels = "%Y") +
   labs(title = "Proportion of \n United States RDD \n Spending 1985-2015",
-       y="Amount in USD (2021 \n Pricess and Exchange Rates)",
+       y="Amount in USD (2021 \n Prices and Exchange Rates)",
        x="Year",
        color= "Legend Title")
 
@@ -251,9 +258,7 @@ print(RDD.US.Eras.Line.plot)
 
 ```
 
-
-
-```{r}
+```{r Germany and US Line Plot for total budget, fig.cap= "US and Germany Total RDD Spending 1985 to 2015. Line graph used to visualize potential trends."}
 # Germ and US Line Plot
 US.Germ.total.plot <- ggplot(US.and.Germany.RDD,
                               aes(x = Date,
@@ -263,7 +268,7 @@ US.Germ.total.plot <- ggplot(US.and.Germany.RDD,
   ylim(0, 12500) +
   scale_color_manual(values = c("tomato3", "darkblue")) +
   labs(title = "Total RDD Spending 1985-2015",
-       y="Amount in USD (2021 \n Pricess and Exchange Rates)",
+       y="Amount in USD (2021 \n Prices and Exchange Rates)",
        x="Year",
        color= "Legend Title")
 
@@ -272,7 +277,26 @@ print(US.Germ.total.plot)
 ```
 
 
-```{r}
+
+```{r Germany and US Bar Plot for total budget, fig.cap= "US and Germany Total RDD Spending 1985 to 2015. Bar graph used to visually compare relative magnitude of total spending."}
+
+# Create the US and Germ Total bar plot
+US.Germ.total.Bar.plot <- ggplot(US.and.Germany.RDD, aes(x = Year, y= Total.Budget, fill= Country)) +
+  geom_bar(stat= "identity", position = "stack") +
+  geom_bar(stat= "identity", position = "stack") +
+  scale_fill_manual(values = c("tomato3", "darkblue")) +
+  ylim(0, 15000) +
+  labs(fill = "Country")+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1, size = 9)) +
+  labs(title = "Total RDD Spending",
+       y="Amount in USD (2021 \n Prices and Exchange Rates)",
+       x="Year")
+print(US.Germ.total.Bar.plot)
+```
+
+
+
+```{r Fossil Fuel Germ and US Line, fig.cap= "US and Germany Fossil Fuel RDD Spending 1985 to 2015. Line graph used to visualize potential trends."}
 #Fossil Fuel Germ and US Line Plot
 US.Germ.fossil.plot <- ggplot(US.and.Germany.RDD,
                               aes(x = Date,
@@ -282,7 +306,7 @@ US.Germ.fossil.plot <- ggplot(US.and.Germany.RDD,
   ylim(0, 12500) +
   scale_color_manual(values = c("tomato3", "darkblue")) +
   labs(title = "Fossil Fuel RDD Spending 1985-2015",
-       y="Amount in USD (2021 \n Pricess and Exchange Rates)",
+       y="Amount in USD (2021 \n Prices and Exchange Rates)",
        x="Year",
        color= "Legend Title")
 
@@ -290,7 +314,27 @@ print(US.Germ.fossil.plot)
 
 ```
 
-```{r}
+
+```{r US and Germ fossil fuel Bar, fig.cap= "US and Germany Fossil Fuel RDD Spending 1985 to 2015. Bar graph used to visually compare relative magnitude of total spending."}
+# Create the US and Germ fossil fuel bar plot
+US.Germ.Fossil.fuel.Bar.plot <- ggplot(US.and.Germany.RDD, aes(x = Year, y= Fossil.Fuel, fill= Country)) +
+  geom_bar(stat= "identity", position = "stack") +
+  geom_bar(stat= "identity", position = "stack") +
+  scale_fill_manual(values = c("tomato3", "darkblue")) +
+  ylim(0, 5000) +
+  labs(fill = "Country")+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1, size = 9)) +
+  labs(title = "Fossil Fuel of RDD Spending",
+       y="Amount in USD (2021 \n Prices and Exchange Rates)",
+       x="Year")
+print(US.Germ.Fossil.fuel.Bar.plot)
+
+```
+
+
+
+
+```{r Low Carbon Germ and US Line Plot, fig.cap= "US and Germany Low Carbon Spending 1985 to 2015. Line graph used to visualize potential trends."}
 #Low Carbon Germ and US Line Plot
 US.Germ.lowC.plot <- ggplot(US.and.Germany.RDD,
                               aes(x = Date,
@@ -300,7 +344,7 @@ US.Germ.lowC.plot <- ggplot(US.and.Germany.RDD,
   ylim(0, 12500) +
   scale_color_manual(values = c("tomato3", "darkblue")) +
   labs(title = "Low Carbon RDD Spending 1985-2015",
-       y="Amount in USD (2021 \n Pricess and Exchange Rates)",
+       y="Amount in USD (2021 \n Prices and Exchange Rates)",
        x="Year",
        color= "Legend Title")
 
@@ -309,71 +353,20 @@ print(US.Germ.lowC.plot)
 ```
 
 
-```{r}
-#Creating a cowplot
-library(cowplot)
-
-legend_cow <- get_legend(
-  US.Germ.lowC.plot + 
-  guides(color = guide_legend(nrow = 1)) +
-  theme(legend.position = "right"))
 
 
-#Constructing the cowplot. NEED HELP FORMATTING SO THAT GRAPHS ARE VERTICAL
-US.Germ.cowplot <- plot_grid(
-  US.Germ.total.plot + theme(legend.position="none"),
-  US.Germ.fossil.plot + theme(legend.position="none"),
-  US.Germ.lowC.plot + theme(legend.position="none"),
-  legend_cow
-  )
-print(US.Germ.cowplot)
 
-```
-
-```{r}
-
-# Create the US and Germ Total bar plot
-US.Germ.total.Bar.plot <- ggplot(US.and.Germany.RDD, aes(x = Year, y= Total.Budget, fill= Country)) +
-  geom_bar(stat= "identity", position = "stack") +
-  geom_bar(stat= "identity", position = "stack") +
-  scale_fill_manual(values = c("tomato3", "darkblue")) +
-  ylim(0, 15000) +
-  labs(fill = "Country")+
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
-  labs(title = "Proportion of RDD Spending",
-       y="Amount in USD (2021 \n Pricess and Exchange Rates)",
-       x="Year")
-print(RDD.US.Eras.Bar.plot)
-```
-
-```{r}
-# Create the US and Germ fossil fuel bar plot
-US.Germ.Fossil.fuel.Bar.plot <- ggplot(US.and.Germany.RDD, aes(x = Year, y= Fossil.Fuel, fill= Country)) +
-  geom_bar(stat= "identity", position = "stack") +
-  geom_bar(stat= "identity", position = "stack") +
-  scale_fill_manual(values = c("tomato3", "darkblue")) +
-  ylim(0, 5000) +
-  labs(fill = "Country")+
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
-  labs(title = "Proportion of RDD Spending",
-       y="Amount in USD (2021 \n Pricess and Exchange Rates)",
-       x="Year")
-print(US.Germ.Fossil.fuel.Bar.plot)
-
-```
-
-
-```{r}
-# Create the US and Germ fossil fuel bar plot
+```{r US and Germ Low Carbon, fig.cap= "US and Germany Low Carbon RDD Spending 1985 to 2015, Bar graph used to visually compare relative magnitude of total spending."}
+# Create the US and Germ Low Carbon bar plot
 US.Germ.low.carbon.Bar.plot <- ggplot(US.and.Germany.RDD, aes(x = Year, y= Low.Carbon.Energy, fill= Country)) +
   geom_bar(stat= "identity", position = "stack") +
   geom_bar(stat= "identity", position = "stack") +
   scale_fill_manual(values = c("tomato3", "darkblue")) +
   ylim(0, 11000) +
   labs(fill = "Country")+
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
-  labs(title = "Low Carbon RDD",
-       y="Amount in USD (2021 \n Pricess and Exchange Rates)",
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1, size = 9)) +
+  labs(title = "Low Carbon RDD Spending 1985-2015",
+       y="Amount in USD (2021 \n Prices and Exchange Rates)",
        x="Year")
 print(US.Germ.low.carbon.Bar.plot)
 
@@ -435,6 +428,60 @@ print(US.Germany.RDD.plot)
 
 ```
 
+
+
+
+
+
+
+```{r visualizing the pre US and Germany data together, fig.cap= "US and Germany Year over Year RDD Spending 1985 to 2008"}
+#plotting the data
+US.Germany.RDD.pre.plot <- US.and.Germany.RDD %>%
+  filter(Era == "Pre") %>%
+  ggplot(aes(x = Date,
+             y = Percent.Change, 
+             color = Country)) + 
+  geom_line() +
+  geom_point() +
+  geom_smooth(data = subset(US.and.Germany.RDD, Country == "Germany" & Era == "Pre"), method = "lm", se=FALSE, color= "tomato2") +
+  geom_smooth(data = subset(RDD.US.Eras, Country == "US" & Era == "Pre"), method = "lm", se=FALSE, color= "blue3") +
+  scale_color_manual(values = c("tomato3", "darkblue")) +
+  labs(title = "YoY Change in Public Low-Carbon \n Energy RD&D Spending: \n US vs. Germany",
+       y="Year-over-Year Percent Change",
+       x="Year") + 
+  scale_x_date(date_breaks = "1 years", date_labels = "%Y") +
+  our_theme +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1, size=9))
+  
+print(US.Germany.RDD.pre.plot)
+
+```
+
+```{r visualizing Obama US and Germany data together, fig.cap= "US and Germany Year over Year RDD Spending 2009 to 2015"}
+#plotting the data
+US.Germany.RDD.Obama.plot <- US.and.Germany.RDD %>%
+  filter(Era == "Obama") %>%
+  ggplot(aes(x = Date,
+             y = Percent.Change, 
+             color = Country)) + 
+  geom_line() +
+  geom_point() +
+  geom_smooth(data = subset(US.and.Germany.RDD, Country == "Germany" & Era == "Obama"), method = "lm", se=FALSE, color= "tomato2") +
+  geom_smooth(data = subset(RDD.US.Eras, Country == "US" & Era == "Obama"), method = "lm", se=FALSE, color= "blue3") +
+  scale_color_manual(values = c("tomato3", "darkblue")) +
+  labs(title = "YoY Change in Public Low-Carbon \n Energy RD&D Spending: \n US vs. Germany",
+       y="Year-over-Year Percent Change",
+       x="Year") + 
+  scale_x_date(date_breaks = "1 years", date_labels = "%Y") +
+  our_theme +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1, size=9))
+  
+print(US.Germany.RDD.Obama.plot)
+
+```
+
+
+
 ```{r conducting 3 ttests}
 
 # T-test #1) U.S. Public Low-Carbon Energy RD&D Spending: Pre-Obama (1985-2008) vs. during Obama Administration (2009-2015)
@@ -492,11 +539,34 @@ Post.2009.US.Germany.ttest
 
 \newpage
 
-#Scripts, data and code
-The repository linked at the beginning contains both the raw data, wrangled data, and code utilized. They are found in their respective folders.
+#Scripts, data and code The repository linked at the beginning contains
+both the raw data, wrangled data, and code utilized. They are found in
+their respective folders.
 
-#Quality assurance 
-Please note that any conclusions created by this report are limited as only one source of data and one variable were utilized. Further examination of additional metrics and countries are recommended for future analyses.  
+#Quality assurance Please note that any conclusions created by this
+report are limited as only one source of data and one variable were
+utilized. Further examination of additional metrics and countries are
+recommended for future analyses.
+
+\newpage
+
+#Appendix
+
+```{r Combined bar plot of US RDD}
+# Create the combined bar plot
+RDD.US.Eras.Bar.plot <- ggplot(RDD.US.Eras, aes(x = Year)) +
+  geom_bar(aes(y = Total.Budget, fill = "Total.budget"), stat= "identity", position = "identity") +
+  geom_bar(aes(y = Low.Carbon.Energy, fill = "Low.Carbon"), stat= "identity", position = "identity") +
+  geom_bar(aes(y = Fossil.Fuel, fill = "Fossil.Fuels"), stat= "identity", position = "identity") +
+  scale_fill_manual(values = c("Fossil.Fuels" = "midnightblue", "Low.Carbon" = "darkolivegreen3", "Total.budget" = "sienna3")) +
+  labs(fill = "Budget Portion")+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+  labs(title = "Proportion of RDD Spending",
+       y="Amount in USD (2021 \n Pricess and Exchange Rates)",
+       x="Year")
+print(RDD.US.Eras.Bar.plot)
+
+```
 
 # References
 
