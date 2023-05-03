@@ -1,5 +1,5 @@
 ---
-title: "Insert title of project here"
+title: "The Obama Administration's Significance on Public Low-Carbon Energy RD&D Spending"
 author: "Irene Chang, Susanna Jenkins, and Jordan Mullens"
 output:
   pdf_document:
@@ -42,8 +42,6 @@ library(janitor)
 library(knitr)
 library(kableExtra)
 
-
-
 # Set your ggplot theme
 library(ggthemes)
 our_theme <- theme_base() +
@@ -81,7 +79,14 @@ from central or federal government budgets and state-owned companies.
 Spending categories encompass renewables, nuclear power, fossil fuels,
 hydrogen, fuel cells, and energy efficiency.
 
-\newpage
+## Table summarizing the dataset structure
+
+| Variable              | Range_Germany | Range_US | Unit |
+|-----------------------|---------------|----------|------|
+| Total.Spending.       | 1780.5        | 9094.0   | USD  |
+| Fossil.Fuel.Spending  | 297.8         | 3919.8   | USD  |
+| Low.Carbon.Spending   | 1586.6        |  5175.0  | USD  |
+| Year.over.Year.Change | 83.14         | 101.8.   | USD  |
 
 # Data Wrangling
 
@@ -92,15 +97,6 @@ created by extracting the desired years (1985-2015), currency (USD 2021
 prices and exchange rates), and economic indications (Total, Fossil
 Fuels, and Unallocated) for each country. A variable for year-over-year
 percentage (YoY) difference was created to normalize all comparisons.
-
-| Variable             | Range_Germany | Range_US | Unit |
-|----------------------|---------------|----------|------|
-| Total.Spending.      |  1780.5       | 9094.0   | USD  |
-| Fossil.Fuel.Spending | 297.8         | 3919.8   | USD  |
-| Low.Carbon.Spending  | 1586.6        |  5175.0  | USD  |
-|Year.over.Year.Change | 83.14         | 101.8.   | USD  |
-
-
 
 ```{r dataset wrangling}
 #create new data frame, change column names
@@ -231,8 +227,6 @@ US.Obama.summary <- US.and.Germany.RDD %>%
   summary()
 
 kable(US.Obama.summary, caption = "Summary Statistics for Obama administration")
-
-
 
 ```
 
@@ -484,26 +478,15 @@ print(US.Germany.RDD.Obama.plot)
 
 ```{r conducting 3 ttests}
 
-# T-test #1) U.S. Public Low-Carbon Energy RD&D Spending: Pre-Obama (1985-2008) vs. during Obama Administration (2009-2015)
-
-        #Alternative hypothesis == YoY change in public spending on lower-carbon energy RD&D is significant during Obama administration
-
-        #Run two-sample T-test on US RDD "Eras" data to determine if mean YoY change in investment is the same or different before vs. during Obama admin
+#United States Pre-Obama vs Obama-era analysis
 
 US.Pre.v.Post.Obama.ttest <- t.test(RDD.US.Eras$Percent.Change ~ 
                                       RDD.US.Eras$Era)
 
 US.Pre.v.Post.Obama.ttest
 
-         #The p-value is 0.5771 which is greater than 0.05 so we must accept our null hypothesis. Therefore, mean year-over-year change in public low-carbon RD&D spending during the Obama presidency (2009-2015) was not statistically distinct from the Pre-Obama era (1985-2008) YoY spending change.
 
-#---------------------------
-  
-# T-test #2) Pre-Obama Public Low-Carbon RD&D Spending (1985-2008): U.S. vs Germany 
-
-         #Alternative hypothesis == Prior to Obama's inauguration (in the period spanning 1985-2008), the mean YoY change in public low-carbon RDD spending in the United States is not statistically distinct from Germany's mean YoY change in public spending   
-    
-          ##^ this hypothesis would mean that our null hypothesis is: prior to obama admin, the mean YoY change in public low-carbon RDD spending in the United States IS statistically distinct from germany  
+#Pre-Obama US vs Germany analysis
 
 Pre.2009.US.Germany.RDD <- filter(US.and.Germany.RDD, Year %in% c(1985:2008))
   
@@ -512,15 +495,8 @@ Pre.2009.US.Germany.ttest <- t.test(Pre.2009.US.Germany.RDD$Percent.Change ~
 
 Pre.2009.US.Germany.ttest
     
-      #The p-value is 0.5113 which is greater than 0.05 so we must accept our null hypothesis. Therefore, in the period prior to Obama's presidency (1985-2008), the mean year-over-year change in public low-carbon RD&D spending in the U.S. was statistically distinct from Germany.
-    
-      #NOTES FROM GOOGLE RE: NULL: If the p-value is below your threshold of significance (typically p < 0.05), then you can reject the null hypothesis, but this does not necessarily mean that your alternative hypothesis is true.
 
-#------------------------------
-  
-# T-test #3) Obama-era Public Low-carbon RD&D Spending (2009-2015): United States vs. Germany
-
-            ##Alternative Hypothesis == during the Obama presidency (2009-2015), the mean YoY change in public low-carbon RDD spending in the United States was statistically distinct from the mean YoY change in Germany 
+#Obama-era US vs Germany analysis
 
 Post.2009.US.Germany.RDD <- filter(US.and.Germany.RDD, Year %in% c(2009:2015))
   
@@ -528,14 +504,20 @@ Post.2009.US.Germany.ttest <- t.test(Post.2009.US.Germany.RDD$Percent.Change ~
                                       Post.2009.US.Germany.RDD$Country)
 
 Post.2009.US.Germany.ttest
-  
-          #The p-value is 0.857 which is greater than 0.05 so the null hypothesis is accepted. Therefore, Obama-era (2009-2015) mean year-over-year change in public low-carbon RD&D spending in the U.S. was not statistically distinct from Germany.
 
 ```
 
 \newpage
 
 # Summary and Conclusions
+
+## List of p-values from two-sided t-test analyses.
+
+| Analysis                  |  p_value      |
+|---------------------------|---------------|
+| US.PreObama.v.ObamaEra    |  0.5771       |
+| PreObama.US.v.Germany     |  0.5113       | 
+| ObamaEra.US.v.Germany     |  0.857        |
 
 \newpage
 
