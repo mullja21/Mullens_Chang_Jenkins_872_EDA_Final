@@ -20,13 +20,15 @@ editor_options:
 \tableofcontents 
 \newpage
 \listoftables 
+1   Dataset information .............................................. 6
+2   Summary statistics .............................................6, 7
+3   p-values from two-sided t-test analyses ......................... 21
+
+\newpage
 \newpage
 \listoffigures 
 \newpage
 
-```{r, include=FALSE}
-options(tinytex.verbose = TRUE)
-```
 
 ```{r setup, include=FALSE}
 # Set your working directory
@@ -101,7 +103,7 @@ In order to create a low carbon energy column, we further filtered the data to i
 | Year.over.Year.Change | 83.14         | 101.8.   | % change        |
 
 
-```{r dataset wrangling}
+```{r dataset wrangling, include=FALSE, echo = FALSE}
 #create new data frame, change column names
 RDD.newcolnames <- RDD.raw %>%
   row_to_names(row_number = 1)
@@ -156,7 +158,7 @@ RDD.Germany <- data.frame(Year=c("1985", "1986", "1987", "1988", "1989", "1990",
 
 ```
 
-```{r cleaning up data set for exploratory phase and analysis}
+```{r cleaning up data set for exploratory phase and analysis, include=FALSE, echo = FALSE}
 #Adding date column to US data frame and transforming it into date object. Also 
 #adding a column to denote pre or Obama era for graphing.
 RDD.US.Eras <- RDD.US %>%
@@ -175,7 +177,7 @@ US.and.Germany.RDD <- US.and.Germany.RDD %>%
 
 ```
 
-```{r saving processed data}
+```{r saving processed data, include=FALSE, echo = FALSE}
 #file for Us and Germany
 write.csv(US.and.Germany.RDD, row.names = FALSE, file = "./Processed_Data/US.and.Germany.RDD.csv")
 
@@ -188,7 +190,7 @@ write.csv(RDD.US.Eras, row.names = FALSE, file = "./Processed_Data/US.Eras.RDD.c
 
 # Exploratory Analysis
 
-```{r Exploring dimensions of the wrangled data set}
+```{r Exploring dimensions of the wrangled data set, include=FALSE, echo = FALSE}
 
 #US Data Set
 dim(RDD.US.Eras)
@@ -204,14 +206,14 @@ head(US.and.Germany.RDD)
 
 The data was reviewed holistically to understand general trends between 1985 and 2015 for both the United States and Germany. Summary statistics by country for each energy type and total budget are listed in the tables below: 
 
-```{r calculating the summary statistics for US and Germany and creating tables}
+```{r calculating the summary statistics for US and Germany and creating tables, echo = FALSE}
 #creating Germany Data summary
 Germ.summary <- US.and.Germany.RDD %>%
   filter(Country== "Germany") %>%
   select(Fossil.Fuel, Low.Carbon.Energy, Total.Budget, Percent.Change) %>%
   summary()
 
-#kable(Germ.summary, caption = "Summary Statistics for Germany")
+kable(Germ.summary, caption = "Summary Statistics for Germany")
 
 #creating US Pre Obama summary
 US.Pre.summary <- US.and.Germany.RDD %>%
@@ -220,7 +222,7 @@ US.Pre.summary <- US.and.Germany.RDD %>%
   select(Fossil.Fuel, Low.Carbon.Energy, Total.Budget, Percent.Change) %>%
   summary()
 
-#kable(US.Pre.summary, caption = "Summary Statistics for US pre-Obama administration")
+kable(US.Pre.summary, caption = "Summary Statistics for US pre-Obama administration")
 
 #creating Obama admin summary
 US.Obama.summary <- US.and.Germany.RDD %>%
@@ -229,13 +231,14 @@ US.Obama.summary <- US.and.Germany.RDD %>%
   select(Fossil.Fuel, Low.Carbon.Energy, Total.Budget, Percent.Change) %>%
   summary()
 
-#kable(US.Obama.summary, caption = "Summary Statistics for Obama administration")
+kable(US.Obama.summary, caption = "Summary Statistics for Obama administration")
 
 ```
 
-First, the US and Germany total budgets, fossil fuel budgets, and low carbon energy budgets were graphed. A line graph was utilized to identify any potential trends in spending while a bar graph was utilized to examine the relative magnitude of spending by country. Generally, the United States spends more on RD&D than Germany Figure \\@ref(fig:Germany and US Line Plot for total budget). Germany’s spending appears to be less variable than US RD&D spending as demonstrated by Figure Figure \@ref(fig:Germany and US Bar Plot for total budget).
+First, the US and Germany total budgets, fossil fuel budgets, and low carbon energy budgets were graphed. A line graph was utilized to identify any potential trends in spending while a bar graph was utilized to examine the relative magnitude of spending by country. Generally, the United States spends more on RD&D than Germany Figure 1. Germany’s spending appears to be less variable than US RD&D spending as demonstrated by Figure Figure 2.
 
-```{r Germany and US Line Plot for total budget, fig.cap= "US and Germany Total RDD Spending 1985 to 2015. Line graph used to visualize potential trends."}
+\newpage
+```{r Germany and US Line Plot for total budget, fig.cap= "US and Germany Total RDD Spending 1985 to 2015", echo = FALSE}
 # Germ and US Line Plot
 US.Germ.total.plot <- ggplot(US.and.Germany.RDD,
                               aes(x = Date,
@@ -253,7 +256,7 @@ print(US.Germ.total.plot)
 
 ```
 
-```{r Germany and US Bar Plot for total budget, fig.cap= "US and Germany Total RDD Spending 1985 to 2015. Bar graph used to visually compare relative magnitude of total spending."}
+```{r Germany and US Bar Plot for total budget, fig.cap= "US and Germany Total RDD Spending 1985 to 2015", echo = FALSE}
 
 # Create the US and Germ Total bar plot
 US.Germ.total.Bar.plot <- ggplot(US.and.Germany.RDD, aes(x = Year, y= Total.Budget, fill= Country)) +
@@ -269,11 +272,12 @@ US.Germ.total.Bar.plot <- ggplot(US.and.Germany.RDD, aes(x = Year, y= Total.Budg
 print(US.Germ.total.Bar.plot)
 ```
 
+\newpage
 
-For both countries, it appears that Low Carbon RD&D spending decreased from 1985 to 2000 and increased from 2000 to 2015 \@ref(fig: US and Germany Low Carbon Spending 1985 to 2015. Line graph used to visualize potential trends.) 
+For both countries, it appears that Low Carbon RD&D spending decreased from 1985 to 2000 and increased from 2000 to 2015 (Figure 3). 
 
 
-```{r Low Carbon Germ and US Line Plot, fig.cap= "US and Germany Low Carbon Spending 1985 to 2015. Line graph used to visualize potential trends."}
+```{r Low Carbon Germ and US Line Plot, fig.cap= "US and Germany Low Carbon Spending 1985 to 2015", echo = FALSE}
 #Low Carbon Germ and US Line Plot
 US.Germ.lowC.plot <- ggplot(US.and.Germany.RDD,
                               aes(x = Date,
@@ -291,7 +295,7 @@ print(US.Germ.lowC.plot)
 
 ```
 
-```{r US and Germ Low Carbon, fig.cap= "US and Germany Low Carbon RDD Spending 1985 to 2015, Bar graph used to visually compare relative magnitude of total spending."}
+```{r US and Germ Low Carbon, fig.cap= "US and Germany Low Carbon RDD Spending 1985 to 2015", echo = FALSE}
 # Create the US and Germ Low Carbon bar plot
 US.Germ.low.carbon.Bar.plot <- ggplot(US.and.Germany.RDD, aes(x = Year, y= Low.Carbon.Energy, fill= Country)) +
   geom_bar(stat= "identity", position = "stack") +
@@ -307,11 +311,12 @@ print(US.Germ.low.carbon.Bar.plot)
 
 ```
 
+\newpage
 
-It is unclear whether these changes are significant and further analysis is needed. A few notable abnormalities in the Germany data set include the years 1996, 1997, and 1998 where fossil fuel spending was well below the average Figure . 
+It is unclear whether these changes are significant and further analysis is needed. A few notable abnormalities in the Germany data set include the years 1996, 1997, and 1998 where fossil fuel spending was well below the average (Figure 5). 
 
 
-```{r Fossil Fuel Germ and US Line, fig.cap= "US and Germany Fossil Fuel RDD Spending 1985 to 2015. Line graph used to visualize potential trends."}
+```{r Fossil Fuel Germ and US Line, fig.cap= "US and Germany Fossil Fuel RDD Spending 1985 to 2015", echo = FALSE}
 #Fossil Fuel Germ and US Line Plot
 US.Germ.fossil.plot <- ggplot(US.and.Germany.RDD,
                               aes(x = Date,
@@ -329,7 +334,7 @@ print(US.Germ.fossil.plot)
 
 ```
 
-```{r US and Germ fossil fuel Bar, fig.cap= "US and Germany Fossil Fuel RDD Spending 1985 to 2015. Bar graph used to visually compare relative magnitude of total spending."}
+```{r US and Germ fossil fuel Bar, fig.cap= "US and Germany Fossil Fuel RDD Spending 1985 to 2015", echo = FALSE}
 # Create the US and Germ fossil fuel bar plot
 US.Germ.Fossil.fuel.Bar.plot <- ggplot(US.and.Germany.RDD, aes(x = Year, y= Fossil.Fuel, fill= Country)) +
   geom_bar(stat= "identity", position = "stack") +
@@ -345,10 +350,11 @@ print(US.Germ.Fossil.fuel.Bar.plot)
 
 ```
 
+\newpage
 
-Then, the US data was graphed alone to examine the different spending categories, Fossil Fuels and Low Carbon Energy, against the total spending Figure . In 2009, there is a noticeable increase in the total spending for both fossil fuels and low carbon energy; the total budget doubled from the previous year. After the initial increase in 2009, the total budget, and consequently the low carbon energy and fossil fuel, numbers appear to decline.  
+Then, the US data was graphed alone to examine the different spending categories, Fossil Fuels and Low Carbon Energy, against the total spending (Figure 7). In 2009, there is a noticeable increase in the total spending for both fossil fuels and low carbon energy; the total budget doubled from the previous year. After the initial increase in 2009, the total budget, and consequently the low carbon energy and fossil fuel, numbers appear to decline.  
 
-```{r Line Plot of All US RDD, fig.cap= "US RDD Spending 1985 to 2015"}
+```{r Line Plot of All US RDD, fig.cap= "US RDD Spending 1985 to 2015", echo = FALSE}
 #US Line Plot
 RDD.US.Eras.Line.plot <- ggplot(RDD.US.Eras, aes(x = Date)) +
   geom_line(aes(y = Total.Budget, color= "Total.Spending")) +
@@ -389,9 +395,11 @@ In the first two-sample t-test, we addressed the first research question by look
 
 The test returned a p-value of 0.5771 which is above our threshold of significance (p < 0.05). Therefore, we fail to reject our null hypothesis (H) that mean YoY change in public low-carbon RD&D spending during the Obama presidency (2009-2015) was not statistically distinct from the Pre-Obama era (1985-2008) YoY change in spending. 
 
-Figure  displays the year over year percent change in low carbon energy RD&D for both the pre-Obama and Obama time periods. A linear regression was constructed and added to the YoY lines to examine the data trends over time.  
+Figure 8 displays the year over year percent change in low carbon energy RD&D for both the pre-Obama and Obama time periods. A linear regression was constructed and added to the YoY lines to examine the data trends over time.  
 
-```{r visualizing the US data, fig.cap= "US Year over Year RDD Spending 1985 to 2015"}
+\newpage
+
+```{r visualizing the US data, fig.cap= "US Year over Year RDD Spending 1985 to 2015", echo = FALSE}
 #plotting the pre-Obama data
 RDD.US.Eras.plot <- RDD.US.Eras %>%
   ggplot(
@@ -427,9 +435,10 @@ To address the second question regarding pre-Obama spending in U.S. and Germany,
 
 Our test returned a p-value of 0.5113 which is above the threshold of significance (p < 0.05). Therefore, we fail to reject the null hypothesis (H0) that in the period prior to Obama's presidency (1985-2008), mean year-over-year change in public low-carbon RD&D spending in the United States was statistically distinct from Germany. 
 
-Figure displays the year over year percent change in low carbon energy RDD for the US and Germany during the pre-Obama administration time period. A linear regression was constructed and added to the YoY lines to examine the data trends over time. 
+Figure 9 displays the year over year percent change in low carbon energy RDD for the US and Germany during the pre-Obama administration time period. A linear regression was constructed and added to the YoY lines to examine the data trends over time. 
+\newpage
 
-```{r visualizing the pre US and Germany data together, fig.cap= "US and Germany Year over Year RDD Spending 1985 to 2008"}
+```{r visualizing the pre US and Germany data together, fig.cap= "US and Germany Year over Year RDD Spending 1985 to 2008", echo = FALSE}
 #plotting the data
 US.Germany.RDD.pre.plot <- US.and.Germany.RDD %>%
   filter(Era == "Pre") %>%
@@ -465,9 +474,10 @@ We then conducted a similar two-sided t-test to address the third question regar
 
 The final two-sided t-test returned a p-value of 0.857 which is above the threshold of significance (p < 0.05). Therefore, we fail to reject the null hypothesis (H0) that mean YoY change in public low-carbon RD&D spending in the U.S. was not statistically distinct from Germany during the Obama Administration. 
 
-figure  displays the year over year percent change in low carbon energy RDD for the US and Germany during the Obama administration time period. A linear regression was constructed and added to the YoY lines to examine the data trends over time. 
+Figure 10 displays the year over year percent change in low carbon energy RDD for the US and Germany during the Obama administration time period. A linear regression was constructed and added to the YoY lines to examine the data trends over time. 
 
-```{r visualizing Obama US and Germany data together, fig.cap= "US and Germany Year over Year RDD Spending 2009 to 2015"}
+\newpage
+```{r visualizing Obama US and Germany data together, fig.cap= "US and Germany Year over Year RDD Spending 2009 to 2015", echo = FALSE}
 #plotting the data
 US.Germany.RDD.Obama.plot <- US.and.Germany.RDD %>%
   filter(Era == "Obama") %>%
@@ -491,7 +501,7 @@ print(US.Germany.RDD.Obama.plot)
 ```
 
 
-```{r conducting 3 ttests}
+```{r conducting 3 ttests, include = FALSE}
 
 #United States Pre-Obama vs Obama-era analysis
 
@@ -556,49 +566,10 @@ Please note that any conclusions created by this report are limited as only one 
 
 \newpage
 
-#Appendix
-
-```{r Combined bar plot of US RDD}
-# Create the combined bar plot
-RDD.US.Eras.Bar.plot <- ggplot(RDD.US.Eras, aes(x = Year)) +
-  geom_bar(aes(y = Total.Budget, fill = "Total.budget"), stat= "identity", position = "identity") +
-  geom_bar(aes(y = Low.Carbon.Energy, fill = "Low.Carbon"), stat= "identity", position = "identity") +
-  geom_bar(aes(y = Fossil.Fuel, fill = "Fossil.Fuels"), stat= "identity", position = "identity") +
-  scale_fill_manual(values = c("Fossil.Fuels" = "midnightblue", "Low.Carbon" = "darkolivegreen3", "Total.budget" = "sienna3")) +
-  labs(fill = "Budget Portion")+
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
-  labs(title = "Proportion of RDD Spending",
-       y="Amount in USD (2021 \n Pricess and Exchange Rates)",
-       x="Year")
-print(RDD.US.Eras.Bar.plot)
-
-```
-
-
-```{r visualizing the US and Germany data together, fig.cap= "US and Germany Year over Year RDD Spending 1985 to 2015"}
-#plotting US and Germany data
-US.Germany.RDD.plot <- ggplot(US.and.Germany.RDD,
-                              aes(x = Date,
-                                  y = Percent.Change, 
-                                  color = Country)) + 
-  geom_line() +
-  geom_point() +
-  geom_smooth(data = subset(US.and.Germany.RDD, Country == "Germany"), method = "lm", se=FALSE, color= "tomato2") +
-  geom_smooth(data = subset(RDD.US.Eras, Country == "US"), method = "lm", se=FALSE, color= "dodgerblue3") +
-  scale_color_manual(values = c("tomato3", "darkblue")) +
-  labs(title = "YoY Change in Public Low-Carbon \n Energy RD&D Spending: \n US vs. Germany",
-       y="Year-over-Year Percent Change",
-       x="Year") + 
-  scale_x_date(date_breaks = "2 years", date_labels = "%Y") +
-  our_theme +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
-  
-print(US.Germany.RDD.plot)
-
-```
-
 
 # References
+
+Energy Technology RD&D Budgets. (2023, April). International Energy Agency. Retrieved April 1, 2023 from https://www.iea.org/data-and-statistics/data-product/energy-technology-rd-and-d-budget-database-2
 
 Office of Electricity. (n.d.). 2009 American Recovery and Reinvestment Act. U.S. Department of Energy. Retrieved May 2, 2023, from https://www.energy.gov/oe/2009-american-recovery-and-reinvestment-act. 
 
