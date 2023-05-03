@@ -214,7 +214,7 @@ print(US.Obama.summary)
 
 
 
-```{r}
+```{r Combined bar plot of US RDD}
 # Create the combined bar plot
 RDD.US.Eras.Bar.plot <- ggplot(RDD.US.Eras, aes(x = Year)) +
   geom_bar(aes(y = Total.Budget, fill = "Total.budget"), stat= "identity", position = "identity") +
@@ -228,7 +228,9 @@ RDD.US.Eras.Bar.plot <- ggplot(RDD.US.Eras, aes(x = Year)) +
        x="Year")
 print(RDD.US.Eras.Bar.plot)
 
+```
 
+```{r Line Plot of All US RDD}
 #US Line Plot
 RDD.US.Eras.Line.plot <- ggplot(RDD.US.Eras, aes(x = Date)) +
   geom_line(aes(y = Total.Budget, color= "Total.budget")) +
@@ -247,7 +249,11 @@ RDD.US.Eras.Line.plot <- ggplot(RDD.US.Eras, aes(x = Date)) +
 
 print(RDD.US.Eras.Line.plot)
 
+```
 
+
+
+```{r}
 # Germ and US Line Plot
 US.Germ.total.plot <- ggplot(US.and.Germany.RDD,
                               aes(x = Date,
@@ -263,7 +269,10 @@ US.Germ.total.plot <- ggplot(US.and.Germany.RDD,
 
 print(US.Germ.total.plot)
 
+```
 
+
+```{r}
 #Fossil Fuel Germ and US Line Plot
 US.Germ.fossil.plot <- ggplot(US.and.Germany.RDD,
                               aes(x = Date,
@@ -279,6 +288,9 @@ US.Germ.fossil.plot <- ggplot(US.and.Germany.RDD,
 
 print(US.Germ.fossil.plot)
 
+```
+
+```{r}
 #Low Carbon Germ and US Line Plot
 US.Germ.lowC.plot <- ggplot(US.and.Germany.RDD,
                               aes(x = Date,
@@ -294,7 +306,10 @@ US.Germ.lowC.plot <- ggplot(US.and.Germany.RDD,
 
 print(US.Germ.lowC.plot)
 
+```
 
+
+```{r}
 #Creating a cowplot
 library(cowplot)
 
@@ -313,7 +328,9 @@ US.Germ.cowplot <- plot_grid(
   )
 print(US.Germ.cowplot)
 
+```
 
+```{r}
 
 # Create the US and Germ Total bar plot
 US.Germ.total.Bar.plot <- ggplot(US.and.Germany.RDD, aes(x = Year, y= Total.Budget, fill= Country)) +
@@ -327,7 +344,9 @@ US.Germ.total.Bar.plot <- ggplot(US.and.Germany.RDD, aes(x = Year, y= Total.Budg
        y="Amount in USD (2021 \n Pricess and Exchange Rates)",
        x="Year")
 print(RDD.US.Eras.Bar.plot)
+```
 
+```{r}
 # Create the US and Germ fossil fuel bar plot
 US.Germ.Fossil.fuel.Bar.plot <- ggplot(US.and.Germany.RDD, aes(x = Year, y= Fossil.Fuel, fill= Country)) +
   geom_bar(stat= "identity", position = "stack") +
@@ -341,6 +360,10 @@ US.Germ.Fossil.fuel.Bar.plot <- ggplot(US.and.Germany.RDD, aes(x = Year, y= Foss
        x="Year")
 print(US.Germ.Fossil.fuel.Bar.plot)
 
+```
+
+
+```{r}
 # Create the US and Germ fossil fuel bar plot
 US.Germ.low.carbon.Bar.plot <- ggplot(US.and.Germany.RDD, aes(x = Year, y= Low.Carbon.Energy, fill= Country)) +
   geom_bar(stat= "identity", position = "stack") +
