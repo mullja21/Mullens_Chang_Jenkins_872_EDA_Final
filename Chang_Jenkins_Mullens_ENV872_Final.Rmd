@@ -195,8 +195,6 @@ RDD.US.Eras.Bar.plot <- ggplot(RDD.US.Eras, aes(x = Year)) +
 print(RDD.US.Eras.Bar.plot)
 
 
-
-
 #US Line Plot
 RDD.US.Eras.Line.plot <- ggplot(RDD.US.Eras, aes(x = Date)) +
   geom_line(aes(y = Total.Budget, color= "Total.budget")) +
@@ -214,7 +212,6 @@ RDD.US.Eras.Line.plot <- ggplot(RDD.US.Eras, aes(x = Date)) +
        color= "Legend Title")
 
 print(RDD.US.Eras.Line.plot)
-
 
 
 # Germ and US Line Plot
@@ -262,7 +259,6 @@ US.Germ.lowC.plot <- ggplot(US.and.Germany.RDD,
        color= "Legend Title")
 
 print(US.Germ.lowC.plot)
-
 
 
 #Creating a cowplot
