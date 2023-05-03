@@ -3,6 +3,7 @@
 \PassOptionsToPackage{hyphens}{url}
 %
 \documentclass[
+  12pt,
 ]{article}
 \usepackage{amsmath,amssymb}
 \usepackage{lmodern}
@@ -15,6 +16,7 @@
   \usepackage{unicode-math}
   \defaultfontfeatures{Scale=MatchLowercase}
   \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+  \setmainfont[]{Times New Roman}
 \fi
 % Use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
@@ -33,7 +35,7 @@
   \KOMAoptions{parskip=half}}
 \makeatother
 \usepackage{xcolor}
-\usepackage[margin=1in]{geometry}
+\usepackage[margin=2.54cm]{geometry}
 \usepackage{color}
 \usepackage{fancyvrb}
 \newcommand{\VerbBar}{|}
@@ -90,7 +92,7 @@
 \setlength{\emergencystretch}{3em} % prevent overfull lines
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
-\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\setcounter{secnumdepth}{5}
 \ifLuaTeX
   \usepackage{selnolig}  % disable illegal ligatures
 \fi
@@ -98,22 +100,24 @@
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same} % disable monospaced font for URLs
 \hypersetup{
+  pdftitle={Insert title of project here},
+  pdfauthor={Irene Chang, Susanna Jenkins, and Jordan Mullens},
   hidelinks,
   pdfcreator={LaTeX via pandoc}}
 
-\author{}
-\date{\vspace{-2.5em}}
+\title{Insert title of project here}
+\usepackage{etoolbox}
+\makeatletter
+\providecommand{\subtitle}[1]{% add subtitle to \maketitle
+  \apptocmd{\@title}{\par {\large #1 \par}}{}{}
+}
+\makeatother
+\subtitle{\url{https://github.com/mullja21/Mullens_Chang_Jenkins_872_EDA_Final.git}}
+\author{Irene Chang, Susanna Jenkins, and Jordan Mullens}
+\date{}
 
 \begin{document}
-
-\hypertarget{section}{%
-\subsection{\texorpdfstring{\newpage}{}}\label{section}}
-
-title: ``ENV 872 Final Project'' author: ``Irene Chang, Susanna Jenkins,
-and Jordan Mullens'' date: ``Spring 2023'' output: pdf\_document
-geometry: margin=2.54cm
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\maketitle
 
 \newpage
 \tableofcontents 
@@ -127,196 +131,517 @@ geometry: margin=2.54cm
 \section{Rationale and Research
 Questions}\label{rationale-and-research-questions}}
 
+Question 1: Was the year-over-year change in public investment in
+lower-carbon energy RD\&D significant during the Obama administration?
+
 \newpage
 
 \hypertarget{dataset-information}{%
 \section{Dataset Information}\label{dataset-information}}
 
+The dataset utilized in this analysis was downloaded from International
+Energy Agency. The IEA's Energy Technology RD\&D (Research, Development,
+\& Demonstration) Budgets database provides spending information by
+energy technology in IEA countries from 1974 to 2022. Data is collected
+from central or federal government budgets and state-owned companies.
+Spending categories encompass renewables, nuclear power, fossil fuels,
+hydrogen, fuel cells, and energy efficiency.
+
 \newpage
-
-\hypertarget{exploration-of-raw-data}{%
-\section{Exploration of Raw Data}\label{exploration-of-raw-data}}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{\#checking the original data set dimensions before wrangling. View dimensions, cloumn names, variable type, and head of each column.}
-
-\FunctionTok{dim}\NormalTok{(RDD.raw)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## [1] 1666   52
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{summary}\NormalTok{(RDD.raw)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-##  Public.RD.D.spending.in.Million      X            
-##  Length:1666                     Length:1666       
-##  Class :character                Class :character  
-##  Mode  :character                Mode  :character  
-##  Source..IEA.All.rights.reserved...http...www.iea.org.t.c.termsandconditions...
-##  Length:1666                                                                   
-##  Class :character                                                              
-##  Mode  :character                                                              
-##      X.1                X.2                X.3                X.4           
-##  Length:1666        Length:1666        Length:1666        Length:1666       
-##  Class :character   Class :character   Class :character   Class :character  
-##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
-##      X.5                X.6                X.7                X.8           
-##  Length:1666        Length:1666        Length:1666        Length:1666       
-##  Class :character   Class :character   Class :character   Class :character  
-##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
-##      X.9                X.10               X.11               X.12          
-##  Length:1666        Length:1666        Length:1666        Length:1666       
-##  Class :character   Class :character   Class :character   Class :character  
-##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
-##      X.13               X.14               X.15               X.16          
-##  Length:1666        Length:1666        Length:1666        Length:1666       
-##  Class :character   Class :character   Class :character   Class :character  
-##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
-##      X.17               X.18               X.19               X.20          
-##  Length:1666        Length:1666        Length:1666        Length:1666       
-##  Class :character   Class :character   Class :character   Class :character  
-##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
-##      X.21               X.22               X.23               X.24          
-##  Length:1666        Length:1666        Length:1666        Length:1666       
-##  Class :character   Class :character   Class :character   Class :character  
-##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
-##      X.25               X.26               X.27               X.28          
-##  Length:1666        Length:1666        Length:1666        Length:1666       
-##  Class :character   Class :character   Class :character   Class :character  
-##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
-##      X.29               X.30               X.31               X.32          
-##  Length:1666        Length:1666        Length:1666        Length:1666       
-##  Class :character   Class :character   Class :character   Class :character  
-##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
-##      X.33               X.34               X.35               X.36          
-##  Length:1666        Length:1666        Length:1666        Length:1666       
-##  Class :character   Class :character   Class :character   Class :character  
-##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
-##      X.37               X.38               X.39               X.40          
-##  Length:1666        Length:1666        Length:1666        Length:1666       
-##  Class :character   Class :character   Class :character   Class :character  
-##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
-##      X.41               X.42               X.43               X.44          
-##  Length:1666        Length:1666        Length:1666        Length:1666       
-##  Class :character   Class :character   Class :character   Class :character  
-##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
-##      X.45               X.46               X.47               X.48          
-##  Length:1666        Length:1666        Length:1666        Length:1666       
-##  Class :character   Class :character   Class :character   Class :character  
-##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
-##      X.49          
-##  Length:1666       
-##  Class :character  
-##  Mode  :character
-\end{verbatim}
 
 \hypertarget{data-wrangling}{%
 \section{Data Wrangling}\label{data-wrangling}}
 
-After the initial exploration, the dataset was wrangled to suit the
-analysis. The data frame was modified so that only the.
+Downloaded the Energy Technology RD\&D (Research, Development, \&
+Demonstration) Budgets. After importing the data to GitHub and Rstudio,
+the raw dataset was wrangled to suit our analysis. A new data frame was
+created by extracting the desired years (1985-2015), currency (USD 2021
+prices and exchange rates), and economic indications (Total, Fossil
+Fuels, and Unallocated) for each country. A variable for year-over-year
+percentage (YoY) difference was created to normalize all comparisons.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{\#change column names, select }
+\CommentTok{\#create new data frame, change column names}
+\NormalTok{RDD.newcolnames }\OtherTok{\textless{}{-}}\NormalTok{ RDD.raw }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{row\_to\_names}\NormalTok{(}\AttributeTok{row\_number =} \DecValTok{1}\NormalTok{)}
 
-\FunctionTok{dim}\NormalTok{(RDD.raw)}
+\CommentTok{\#The column names were imported improperly. The first row contains the correct }
+\CommentTok{\#column names, so we used the janitor package since they have a function that }
+\CommentTok{\#will replace the column names with the first row.}
+
+
+\NormalTok{RDD.countries }\OtherTok{\textless{}{-}}
+  \FunctionTok{filter}\NormalTok{(RDD.newcolnames,}
+\NormalTok{         Country }\SpecialCharTok{==} \StringTok{"Germany"} \SpecialCharTok{|}\NormalTok{ Country }\SpecialCharTok{==} \StringTok{"United States"}\NormalTok{,}
+\NormalTok{         Currency }\SpecialCharTok{==} \StringTok{"USD (2021 prices and exchange rates)"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{rename}\NormalTok{(}\StringTok{"Economic.Indicators"} \OtherTok{=} \StringTok{"Economic Indicators"}\NormalTok{)}
+
+
+\NormalTok{RDD.final }\OtherTok{\textless{}{-}}\NormalTok{ RDD.countries }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(Economic.Indicators }\SpecialCharTok{==} \StringTok{"Total Budget"} \SpecialCharTok{|}\NormalTok{ Economic.Indicators }\SpecialCharTok{==} \StringTok{"Unallocated "} \SpecialCharTok{|}\NormalTok{ Economic.Indicators }\SpecialCharTok{==} \StringTok{"Fossil fuels"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{select}\NormalTok{(}\StringTok{"Country"}\NormalTok{, }\StringTok{"Currency"}\NormalTok{, }\StringTok{"Economic.Indicators"}\NormalTok{, }\StringTok{"1985"}\NormalTok{, }\StringTok{"1986"}\NormalTok{, }\StringTok{"1987"}\NormalTok{, }\StringTok{"1988"}\NormalTok{, }\StringTok{"1989"}\NormalTok{, }\StringTok{"1990"}\NormalTok{, }\StringTok{"1991"}\NormalTok{, }\StringTok{"1992"}\NormalTok{, }\StringTok{"1993"}\NormalTok{, }\StringTok{"1994"}\NormalTok{, }\StringTok{"1995"}\NormalTok{, }\StringTok{"1996"}\NormalTok{, }\StringTok{"1997"}\NormalTok{, }\StringTok{"1998"}\NormalTok{, }\StringTok{"1999"}\NormalTok{, }\StringTok{"2000"}\NormalTok{, }\StringTok{"2001"}\NormalTok{, }\StringTok{"2002"}\NormalTok{, }\StringTok{"2003"}\NormalTok{, }\StringTok{"2004"}\NormalTok{, }\StringTok{"2005"}\NormalTok{, }\StringTok{"2006"}\NormalTok{, }\StringTok{"2007"}\NormalTok{, }\StringTok{"2008"}\NormalTok{, }\StringTok{"2009"}\NormalTok{, }\StringTok{"2010"}\NormalTok{, }\StringTok{"2011"}\NormalTok{, }\StringTok{"2012"}\NormalTok{, }\StringTok{"2013"}\NormalTok{, }\StringTok{"2014"}\NormalTok{, }\StringTok{"2015"}\NormalTok{)}
+
+\NormalTok{RDD.transpose }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\FunctionTok{t}\NormalTok{(RDD.final))}
+
+\CommentTok{\#In our final data frame, we want each year to have its own row; however, }
+\CommentTok{\#in the original dataset, each year was a column. We transposed it.}
+
+\FunctionTok{colnames}\NormalTok{(RDD.transpose) }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"Germany.FossilFuels"}\NormalTok{, }\StringTok{"Germany.Unallocated"}\NormalTok{, }\StringTok{"Germany.TotalBudget"}\NormalTok{, }\StringTok{"US.FossilFuels"}\NormalTok{, }\StringTok{"US.Unallocated"}\NormalTok{, }\StringTok{"US.TotalBudget"}\NormalTok{)}
+
+\NormalTok{RDD.transpose.rows }\OtherTok{\textless{}{-}}\NormalTok{ RDD.transpose[}\SpecialCharTok{!}\NormalTok{(}\FunctionTok{row.names}\NormalTok{(RDD.transpose) }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\StringTok{"Country"}\NormalTok{, }\StringTok{"Currency"}\NormalTok{, }\StringTok{"Economic.Indicators"}\NormalTok{)),]}
+
+ 
+\NormalTok{RDD.transpose.rows }\OtherTok{\textless{}{-}}\NormalTok{ RDD.transpose.rows }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate\_at}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{6}\NormalTok{, as.numeric)}
+
+\CommentTok{\#creating frame for US Data}
+\NormalTok{RDD.US }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{Year=}\FunctionTok{c}\NormalTok{(}\StringTok{"1985"}\NormalTok{, }\StringTok{"1986"}\NormalTok{, }\StringTok{"1987"}\NormalTok{, }\StringTok{"1988"}\NormalTok{, }\StringTok{"1989"}\NormalTok{, }\StringTok{"1990"}\NormalTok{, }\StringTok{"1991"}\NormalTok{, }\StringTok{"1992"}\NormalTok{, }\StringTok{"1993"}\NormalTok{, }\StringTok{"1994"}\NormalTok{, }\StringTok{"1995"}\NormalTok{, }\StringTok{"1996"}\NormalTok{, }\StringTok{"1997"}\NormalTok{, }\StringTok{"1998"}\NormalTok{, }\StringTok{"1999"}\NormalTok{, }\StringTok{"2000"}\NormalTok{, }\StringTok{"2001"}\NormalTok{, }\StringTok{"2002"}\NormalTok{, }\StringTok{"2003"}\NormalTok{, }\StringTok{"2004"}\NormalTok{, }\StringTok{"2005"}\NormalTok{, }\StringTok{"2006"}\NormalTok{, }\StringTok{"2007"}\NormalTok{, }\StringTok{"2008"}\NormalTok{, }\StringTok{"2009"}\NormalTok{, }\StringTok{"2010"}\NormalTok{, }\StringTok{"2011"}\NormalTok{, }\StringTok{"2012"}\NormalTok{, }\StringTok{"2013"}\NormalTok{, }\StringTok{"2014"}\NormalTok{, }\StringTok{"2015"}\NormalTok{), }
+                     \AttributeTok{Fossil.Fuel=}\NormalTok{ RDD.transpose.rows}\SpecialCharTok{$}\NormalTok{US.FossilFuels,}
+                     \AttributeTok{Unallocated=}\NormalTok{ RDD.transpose.rows}\SpecialCharTok{$}\NormalTok{US.Unallocated,}
+                     \AttributeTok{Total.Budget=}\NormalTok{ RDD.transpose.rows}\SpecialCharTok{$}\NormalTok{US.TotalBudget) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{Low.Carbon.Energy =} \FunctionTok{c}\NormalTok{(Total.Budget}\SpecialCharTok{{-}}\NormalTok{Fossil.Fuel}\SpecialCharTok{{-}}\NormalTok{Unallocated)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{Percent.Change =}\NormalTok{ ((Low.Carbon.Energy }\SpecialCharTok{{-}}
+                              \FunctionTok{lag}\NormalTok{(Low.Carbon.Energy))}\SpecialCharTok{/}\FunctionTok{lag}\NormalTok{(Low.Carbon.Energy))}\SpecialCharTok{*}\DecValTok{100}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{Country =} \StringTok{"US"}\NormalTok{)}
+
+
+\CommentTok{\#creating frame for Germany Data}
+\NormalTok{RDD.Germany }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{Year=}\FunctionTok{c}\NormalTok{(}\StringTok{"1985"}\NormalTok{, }\StringTok{"1986"}\NormalTok{, }\StringTok{"1987"}\NormalTok{, }\StringTok{"1988"}\NormalTok{, }\StringTok{"1989"}\NormalTok{, }\StringTok{"1990"}\NormalTok{, }\StringTok{"1991"}\NormalTok{, }\StringTok{"1992"}\NormalTok{, }\StringTok{"1993"}\NormalTok{, }\StringTok{"1994"}\NormalTok{, }\StringTok{"1995"}\NormalTok{, }\StringTok{"1996"}\NormalTok{, }\StringTok{"1997"}\NormalTok{, }\StringTok{"1998"}\NormalTok{, }\StringTok{"1999"}\NormalTok{, }\StringTok{"2000"}\NormalTok{, }\StringTok{"2001"}\NormalTok{, }\StringTok{"2002"}\NormalTok{, }\StringTok{"2003"}\NormalTok{, }\StringTok{"2004"}\NormalTok{, }\StringTok{"2005"}\NormalTok{, }\StringTok{"2006"}\NormalTok{, }\StringTok{"2007"}\NormalTok{, }\StringTok{"2008"}\NormalTok{, }\StringTok{"2009"}\NormalTok{, }\StringTok{"2010"}\NormalTok{, }\StringTok{"2011"}\NormalTok{, }\StringTok{"2012"}\NormalTok{, }\StringTok{"2013"}\NormalTok{, }\StringTok{"2014"}\NormalTok{, }\StringTok{"2015"}\NormalTok{),}
+                          \AttributeTok{Fossil.Fuel=}\NormalTok{ RDD.transpose.rows}\SpecialCharTok{$}\NormalTok{Germany.FossilFuels,}
+                          \AttributeTok{Unallocated=}\NormalTok{ RDD.transpose.rows}\SpecialCharTok{$}\NormalTok{Germany.Unallocated,}
+                          \AttributeTok{Total.Budget=}\NormalTok{ RDD.transpose.rows}\SpecialCharTok{$}\NormalTok{Germany.TotalBudget) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{Low.Carbon.Energy =}\NormalTok{ Total.Budget}\SpecialCharTok{{-}}\NormalTok{Fossil.Fuel}\SpecialCharTok{{-}}\NormalTok{Unallocated) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{Percent.Change =}\NormalTok{ ((Low.Carbon.Energy }\SpecialCharTok{{-}}
+                              \FunctionTok{lag}\NormalTok{(Low.Carbon.Energy))}\SpecialCharTok{/}\FunctionTok{lag}\NormalTok{(Low.Carbon.Energy))}\SpecialCharTok{*}\DecValTok{100}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{Country =} \StringTok{"Germany"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#Adding date column to US data frame and transforming it into date object. Also }
+\CommentTok{\#adding a column to denote pre or Obama era for graphing.}
+\NormalTok{RDD.US.Eras }\OtherTok{\textless{}{-}}\NormalTok{ RDD.US }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{Date =} \FunctionTok{ymd}\NormalTok{(}\FunctionTok{paste0}\NormalTok{(RDD.US}\SpecialCharTok{$}\NormalTok{Year, }\StringTok{"{-}01{-}01"}\NormalTok{))) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{Era =} \FunctionTok{ifelse}\NormalTok{(Year }\SpecialCharTok{\textless{}=} \DecValTok{2008}\NormalTok{, }\StringTok{"Pre"}\NormalTok{, }\StringTok{"Obama"}\NormalTok{))}
+
+\CommentTok{\#creating one data frame for US and Germany data}
+\NormalTok{US.and.Germany.RDD }\OtherTok{\textless{}{-}} \FunctionTok{rbind}\NormalTok{(RDD.Germany, RDD.US)}
+
+\CommentTok{\#Adding Date column to US and Germany dataframe. Formatting so that column is }
+\CommentTok{\#transformed to date class}
+
+\NormalTok{US.and.Germany.RDD }\OtherTok{\textless{}{-}}\NormalTok{ US.and.Germany.RDD }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{Date =} \FunctionTok{ymd}\NormalTok{(}\FunctionTok{paste0}\NormalTok{(US.and.Germany.RDD}\SpecialCharTok{$}\NormalTok{Year, }\StringTok{"{-}01{-}01"}\NormalTok{))) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{Era =} \FunctionTok{ifelse}\NormalTok{(Year }\SpecialCharTok{\textless{}=} \DecValTok{2008}\NormalTok{, }\StringTok{"Pre"}\NormalTok{, }\StringTok{"Obama"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#file for Us and Germany}
+\FunctionTok{write.csv}\NormalTok{(US.and.Germany.RDD, }\AttributeTok{row.names =} \ConstantTok{FALSE}\NormalTok{, }\AttributeTok{file =} \StringTok{"./Processed\_Data/US.and.Germany.RDD.csv"}\NormalTok{)}
+
+\CommentTok{\#File for US alone with eras}
+\FunctionTok{write.csv}\NormalTok{(RDD.US.Eras, }\AttributeTok{row.names =} \ConstantTok{FALSE}\NormalTok{, }\AttributeTok{file =} \StringTok{"./Processed\_Data/US.Eras.RDD.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\newpage
+
+\hypertarget{exploratory-analysis}{%
+\section{Exploratory Analysis}\label{exploratory-analysis}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Create the combined bar plot}
+\NormalTok{RDD.US.Eras.Bar.plot }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(RDD.US.Eras, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ Year)) }\SpecialCharTok{+}
+      \FunctionTok{geom\_bar}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{y =}\NormalTok{ Total.Budget, }\AttributeTok{fill =} \StringTok{"Total.budget"}\NormalTok{), }\AttributeTok{stat=} \StringTok{"identity"}\NormalTok{, }\AttributeTok{position =} \StringTok{"identity"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_bar}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{y =}\NormalTok{ Low.Carbon.Energy, }\AttributeTok{fill =} \StringTok{"Low.Carbon"}\NormalTok{), }\AttributeTok{stat=} \StringTok{"identity"}\NormalTok{, }\AttributeTok{position =} \StringTok{"identity"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_bar}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{y =}\NormalTok{ Fossil.Fuel, }\AttributeTok{fill =} \StringTok{"Fossil.Fuels"}\NormalTok{), }\AttributeTok{stat=} \StringTok{"identity"}\NormalTok{, }\AttributeTok{position =} \StringTok{"identity"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{"Fossil.Fuels"} \OtherTok{=} \StringTok{"midnightblue"}\NormalTok{, }\StringTok{"Low.Carbon"} \OtherTok{=} \StringTok{"darkolivegreen3"}\NormalTok{, }\StringTok{"Total.budget"} \OtherTok{=} \StringTok{"sienna3"}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{fill =} \StringTok{"Budget Portion"}\NormalTok{)}\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{axis.text.x =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{angle =} \DecValTok{90}\NormalTok{, }\AttributeTok{vjust =} \FloatTok{0.5}\NormalTok{, }\AttributeTok{hjust=}\DecValTok{1}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Proportion of RDD Spending"}\NormalTok{,}
+       \AttributeTok{y=}\StringTok{"Amount in USD (2021 }\SpecialCharTok{\textbackslash{}n}\StringTok{ Pricess and Exchange Rates)"}\NormalTok{,}
+       \AttributeTok{x=}\StringTok{"Year"}\NormalTok{)}
+\FunctionTok{print}\NormalTok{(RDD.US.Eras.Bar.plot)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Chang_Jenkins_Mullens_ENV872_Final_files/figure-latex/unnamed-chunk-1-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#US Line Plot}
+\NormalTok{RDD.US.Eras.Line.plot }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(RDD.US.Eras, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ Date)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_line}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{y =}\NormalTok{ Total.Budget, }\AttributeTok{color=} \StringTok{"Total.budget"}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_line}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{y =}\NormalTok{ Fossil.Fuel, }\AttributeTok{color=} \StringTok{"Fossil.Fuels"}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_line}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{y =}\NormalTok{ Low.Carbon.Energy, }\AttributeTok{color=} \StringTok{"Low.Carbon"}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{axis.text.x =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{angle =} \DecValTok{90}\NormalTok{, }\AttributeTok{vjust =} \FloatTok{0.5}\NormalTok{, }\AttributeTok{hjust=}\DecValTok{1}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{scale\_color\_manual}\NormalTok{(}\AttributeTok{name =} \StringTok{"Proportion of }\SpecialCharTok{\textbackslash{}n}\StringTok{ RDD Spending"}\NormalTok{, }\AttributeTok{values=} \FunctionTok{c}\NormalTok{(}
+    \StringTok{"Fossil.Fuels"} \OtherTok{=} \StringTok{"midnightblue"}\NormalTok{, }
+    \StringTok{"Low.Carbon"} \OtherTok{=} \StringTok{"darkolivegreen3"}\NormalTok{, }
+    \StringTok{"Total.budget"} \OtherTok{=} \StringTok{"sienna3"}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{scale\_x\_date}\NormalTok{(}\AttributeTok{date\_breaks =} \StringTok{"3 years"}\NormalTok{, }\AttributeTok{date\_labels =} \StringTok{"\%Y"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Proportion of }\SpecialCharTok{\textbackslash{}n}\StringTok{ United States RDD }\SpecialCharTok{\textbackslash{}n}\StringTok{ Spending 1985{-}2015"}\NormalTok{,}
+       \AttributeTok{y=}\StringTok{"Amount in USD (2021 }\SpecialCharTok{\textbackslash{}n}\StringTok{ Pricess and Exchange Rates)"}\NormalTok{,}
+       \AttributeTok{x=}\StringTok{"Year"}\NormalTok{,}
+       \AttributeTok{color=} \StringTok{"Legend Title"}\NormalTok{)}
+
+\FunctionTok{print}\NormalTok{(RDD.US.Eras.Line.plot)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Chang_Jenkins_Mullens_ENV872_Final_files/figure-latex/unnamed-chunk-1-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Germ and US Line Plot}
+\NormalTok{US.Germ.total.plot }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(US.and.Germany.RDD,}
+                              \FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ Date,}
+                                  \AttributeTok{y =}\NormalTok{ Total.Budget, }
+                                  \AttributeTok{color =}\NormalTok{ Country)) }\SpecialCharTok{+} 
+  \FunctionTok{geom\_line}\NormalTok{(}\AttributeTok{size=} \FloatTok{0.9}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_color\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{"tomato3"}\NormalTok{, }\StringTok{"darkblue"}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Total RDD Spending 1985{-}2015"}\NormalTok{,}
+       \AttributeTok{y=}\StringTok{"Amount in USD (2021 }\SpecialCharTok{\textbackslash{}n}\StringTok{ Pricess and Exchange Rates)"}\NormalTok{,}
+       \AttributeTok{x=}\StringTok{"Year"}\NormalTok{,}
+       \AttributeTok{color=} \StringTok{"Legend Title"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 1666   52
+## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+## i Please use `linewidth` instead.
 \end{verbatim}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\FunctionTok{summary}\NormalTok{(RDD.raw)}
+\FunctionTok{print}\NormalTok{(US.Germ.total.plot)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Chang_Jenkins_Mullens_ENV872_Final_files/figure-latex/unnamed-chunk-1-3.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#Fossil Fuel Germ and US Line Plot}
+\NormalTok{US.Germ.fossil.plot }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(US.and.Germany.RDD,}
+                              \FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ Date,}
+                                  \AttributeTok{y =}\NormalTok{ Fossil.Fuel, }
+                                  \AttributeTok{color =}\NormalTok{ Country)) }\SpecialCharTok{+} 
+  \FunctionTok{geom\_line}\NormalTok{(}\AttributeTok{size=} \FloatTok{0.9}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_color\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{"tomato3"}\NormalTok{, }\StringTok{"darkblue"}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Fossil Fuel RDD Spending 1985{-}2015"}\NormalTok{,}
+       \AttributeTok{y=}\StringTok{"Amount in USD (2021 }\SpecialCharTok{\textbackslash{}n}\StringTok{ Pricess and Exchange Rates)"}\NormalTok{,}
+       \AttributeTok{x=}\StringTok{"Year"}\NormalTok{,}
+       \AttributeTok{color=} \StringTok{"Legend Title"}\NormalTok{)}
+
+\FunctionTok{print}\NormalTok{(US.Germ.fossil.plot)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Chang_Jenkins_Mullens_ENV872_Final_files/figure-latex/unnamed-chunk-1-4.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#Low Carbon Germ and US Line Plot}
+\NormalTok{US.Germ.lowC.plot }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(US.and.Germany.RDD,}
+                              \FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ Date,}
+                                  \AttributeTok{y =}\NormalTok{ Low.Carbon.Energy, }
+                                  \AttributeTok{color =}\NormalTok{ Country)) }\SpecialCharTok{+} 
+  \FunctionTok{geom\_line}\NormalTok{(}\AttributeTok{size=} \FloatTok{0.9}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_color\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{"tomato3"}\NormalTok{, }\StringTok{"darkblue"}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Low Carbon RDD Spending 1985{-}2015"}\NormalTok{,}
+       \AttributeTok{y=}\StringTok{"Amount in USD (2021 }\SpecialCharTok{\textbackslash{}n}\StringTok{ Pricess and Exchange Rates)"}\NormalTok{,}
+       \AttributeTok{x=}\StringTok{"Year"}\NormalTok{,}
+       \AttributeTok{color=} \StringTok{"Legend Title"}\NormalTok{)}
+
+\FunctionTok{print}\NormalTok{(US.Germ.lowC.plot)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Chang_Jenkins_Mullens_ENV872_Final_files/figure-latex/unnamed-chunk-1-5.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#Creating a cowplot}
+\FunctionTok{library}\NormalTok{(cowplot)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-##  Public.RD.D.spending.in.Million      X            
-##  Length:1666                     Length:1666       
-##  Class :character                Class :character  
-##  Mode  :character                Mode  :character  
-##  Source..IEA.All.rights.reserved...http...www.iea.org.t.c.termsandconditions...
-##  Length:1666                                                                   
-##  Class :character                                                              
-##  Mode  :character                                                              
-##      X.1                X.2                X.3                X.4           
-##  Length:1666        Length:1666        Length:1666        Length:1666       
-##  Class :character   Class :character   Class :character   Class :character  
-##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
-##      X.5                X.6                X.7                X.8           
-##  Length:1666        Length:1666        Length:1666        Length:1666       
-##  Class :character   Class :character   Class :character   Class :character  
-##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
-##      X.9                X.10               X.11               X.12          
-##  Length:1666        Length:1666        Length:1666        Length:1666       
-##  Class :character   Class :character   Class :character   Class :character  
-##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
-##      X.13               X.14               X.15               X.16          
-##  Length:1666        Length:1666        Length:1666        Length:1666       
-##  Class :character   Class :character   Class :character   Class :character  
-##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
-##      X.17               X.18               X.19               X.20          
-##  Length:1666        Length:1666        Length:1666        Length:1666       
-##  Class :character   Class :character   Class :character   Class :character  
-##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
-##      X.21               X.22               X.23               X.24          
-##  Length:1666        Length:1666        Length:1666        Length:1666       
-##  Class :character   Class :character   Class :character   Class :character  
-##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
-##      X.25               X.26               X.27               X.28          
-##  Length:1666        Length:1666        Length:1666        Length:1666       
-##  Class :character   Class :character   Class :character   Class :character  
-##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
-##      X.29               X.30               X.31               X.32          
-##  Length:1666        Length:1666        Length:1666        Length:1666       
-##  Class :character   Class :character   Class :character   Class :character  
-##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
-##      X.33               X.34               X.35               X.36          
-##  Length:1666        Length:1666        Length:1666        Length:1666       
-##  Class :character   Class :character   Class :character   Class :character  
-##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
-##      X.37               X.38               X.39               X.40          
-##  Length:1666        Length:1666        Length:1666        Length:1666       
-##  Class :character   Class :character   Class :character   Class :character  
-##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
-##      X.41               X.42               X.43               X.44          
-##  Length:1666        Length:1666        Length:1666        Length:1666       
-##  Class :character   Class :character   Class :character   Class :character  
-##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
-##      X.45               X.46               X.47               X.48          
-##  Length:1666        Length:1666        Length:1666        Length:1666       
-##  Class :character   Class :character   Class :character   Class :character  
-##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
-##      X.49          
-##  Length:1666       
-##  Class :character  
-##  Mode  :character
+## 
+## Attaching package: 'cowplot'
 \end{verbatim}
+
+\begin{verbatim}
+## The following object is masked from 'package:ggthemes':
+## 
+##     theme_map
+\end{verbatim}
+
+\begin{verbatim}
+## The following object is masked from 'package:lubridate':
+## 
+##     stamp
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{legend\_cow }\OtherTok{\textless{}{-}} \FunctionTok{get\_legend}\NormalTok{(}
+\NormalTok{  US.Germ.lowC.plot }\SpecialCharTok{+} 
+  \FunctionTok{guides}\NormalTok{(}\AttributeTok{color =} \FunctionTok{guide\_legend}\NormalTok{(}\AttributeTok{nrow =} \DecValTok{1}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{legend.position =} \StringTok{"right"}\NormalTok{))}
+
+
+
+\NormalTok{US.Germ.cowplot }\OtherTok{\textless{}{-}} \FunctionTok{plot\_grid}\NormalTok{(}
+\NormalTok{  US.Germ.total.plot }\SpecialCharTok{+} \FunctionTok{theme}\NormalTok{(}\AttributeTok{legend.position=}\StringTok{"none"}\NormalTok{),}
+\NormalTok{  US.Germ.fossil.plot }\SpecialCharTok{+} \FunctionTok{theme}\NormalTok{(}\AttributeTok{legend.position=}\StringTok{"none"}\NormalTok{),}
+\NormalTok{  US.Germ.lowC.plot }\SpecialCharTok{+} \FunctionTok{theme}\NormalTok{(}\AttributeTok{legend.position=}\StringTok{"none"}\NormalTok{),}
+  \AttributeTok{ncol =} \DecValTok{1}\NormalTok{,}
+  \AttributeTok{nrow =} \DecValTok{3}\NormalTok{,}
+  \AttributeTok{heights =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{),}
+\NormalTok{  legend\_cow}
+\NormalTok{  )}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning in as_grob.default(plot): Cannot convert object of class numeric into a
+## grob.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{print}\NormalTok{(US.Germ.cowplot)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Chang_Jenkins_Mullens_ENV872_Final_files/figure-latex/unnamed-chunk-1-6.pdf}
 
 \newpage
 
 \hypertarget{analysis}{%
 \section{Analysis}\label{analysis}}
 
-\hypertarget{question-1-insert-specific-question-here-and-add-additional-subsections-for-additional-questions-below-if-needed}{%
-\subsection{Question 1: \textless insert specific question here and add
-additional subsections for additional questions below, if
-needed\textgreater{}}\label{question-1-insert-specific-question-here-and-add-additional-subsections-for-additional-questions-below-if-needed}}
+Our analysis of this dataset focuses on comparing the mean investment
+YoY difference of the Pre-Obama era and the mean investment YoY
+difference of the Obama era. However, we need to ensure any changes in
+investment is unique to the Obama administration and not occurring
+globally. Therefore, we will also utilize t-tests to compare US
+investments to Germany's within the same time period.
 
-\hypertarget{question-2}{%
-\subsection{Question 2:}\label{question-2}}
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#plotting the pre{-}Obama data}
+\NormalTok{RDD.US.Eras.plot }\OtherTok{\textless{}{-}}\NormalTok{ RDD.US.Eras }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{ggplot}\NormalTok{(}
+         \FunctionTok{aes}\NormalTok{(}\AttributeTok{x=}\NormalTok{ Date,}
+             \AttributeTok{y=}\NormalTok{ Percent.Change,}
+             \AttributeTok{color=}\NormalTok{ Era)) }\SpecialCharTok{+} 
+  \FunctionTok{geom\_line}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{geom\_smooth}\NormalTok{(}\AttributeTok{data =} \FunctionTok{subset}\NormalTok{(RDD.US.Eras, Era }\SpecialCharTok{==} \StringTok{"Pre"}\NormalTok{), }\AttributeTok{method =} \StringTok{"lm"}\NormalTok{, }\AttributeTok{se=}\ConstantTok{FALSE}\NormalTok{, }\AttributeTok{color=} \StringTok{"darkolivegreen4"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_smooth}\NormalTok{(}\AttributeTok{data =} \FunctionTok{subset}\NormalTok{(RDD.US.Eras, Era }\SpecialCharTok{==} \StringTok{"Obama"}\NormalTok{), }\AttributeTok{method =} \StringTok{"lm"}\NormalTok{, }\AttributeTok{se=}\ConstantTok{FALSE}\NormalTok{, }\AttributeTok{color=} \StringTok{"dodgerblue3"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Year{-}over{-}Year Percent Change in Public }\SpecialCharTok{\textbackslash{}n}\StringTok{ Low{-}Carbon Energy RD\&D }\SpecialCharTok{\textbackslash{}n}\StringTok{ Spending: U.S."}\NormalTok{,}
+       \AttributeTok{y=}\StringTok{"YoY Percent Change"}\NormalTok{,}
+       \AttributeTok{x=}\StringTok{"Year"}\NormalTok{) }\SpecialCharTok{+} 
+  \FunctionTok{scale\_color\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{"darkblue"}\NormalTok{, }\StringTok{"darkgreen"}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{scale\_x\_date}\NormalTok{(}\AttributeTok{date\_breaks =} \StringTok{"2 years"}\NormalTok{, }\AttributeTok{date\_labels =} \StringTok{"\%Y"}\NormalTok{) }\SpecialCharTok{+}
+\NormalTok{  our\_theme }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{axis.text.x =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{angle =} \DecValTok{90}\NormalTok{, }\AttributeTok{vjust =} \FloatTok{0.5}\NormalTok{, }\AttributeTok{hjust=}\DecValTok{1}\NormalTok{))}
+  
+\FunctionTok{print}\NormalTok{(RDD.US.Eras.plot)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## `geom_smooth()` using formula = 'y ~ x'
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: Removed 1 rows containing non-finite values (`stat_smooth()`).
+\end{verbatim}
+
+\begin{verbatim}
+## `geom_smooth()` using formula = 'y ~ x'
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: Removed 1 row containing missing values (`geom_line()`).
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: Removed 1 rows containing missing values (`geom_point()`).
+\end{verbatim}
+
+\begin{figure}
+\centering
+\includegraphics{Chang_Jenkins_Mullens_ENV872_Final_files/figure-latex/visualizing the US data-1.pdf}
+\caption{US Year over Year RDD Spending 1985 to 2015}
+\end{figure}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#plotting the data}
+\NormalTok{US.Germany.RDD.plot }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(US.and.Germany.RDD,}
+                              \FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ Date,}
+                                  \AttributeTok{y =}\NormalTok{ Percent.Change, }
+                                  \AttributeTok{color =}\NormalTok{ Country)) }\SpecialCharTok{+} 
+  \FunctionTok{geom\_line}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{geom\_smooth}\NormalTok{(}\AttributeTok{data =} \FunctionTok{subset}\NormalTok{(US.and.Germany.RDD, Country }\SpecialCharTok{==} \StringTok{"Germany"}\NormalTok{), }\AttributeTok{method =} \StringTok{"lm"}\NormalTok{, }\AttributeTok{se=}\ConstantTok{FALSE}\NormalTok{, }\AttributeTok{color=} \StringTok{"tomato2"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_smooth}\NormalTok{(}\AttributeTok{data =} \FunctionTok{subset}\NormalTok{(RDD.US.Eras, Country }\SpecialCharTok{==} \StringTok{"US"}\NormalTok{), }\AttributeTok{method =} \StringTok{"lm"}\NormalTok{, }\AttributeTok{se=}\ConstantTok{FALSE}\NormalTok{, }\AttributeTok{color=} \StringTok{"dodgerblue3"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_color\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{"tomato3"}\NormalTok{, }\StringTok{"darkblue"}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"YoY Change in Public Low{-}Carbon }\SpecialCharTok{\textbackslash{}n}\StringTok{ Energy RD\&D Spending: }\SpecialCharTok{\textbackslash{}n}\StringTok{ US vs. Germany"}\NormalTok{,}
+       \AttributeTok{y=}\StringTok{"Year{-}over{-}Year Percent Change"}\NormalTok{,}
+       \AttributeTok{x=}\StringTok{"Year"}\NormalTok{) }\SpecialCharTok{+} 
+  \FunctionTok{scale\_x\_date}\NormalTok{(}\AttributeTok{date\_breaks =} \StringTok{"2 years"}\NormalTok{, }\AttributeTok{date\_labels =} \StringTok{"\%Y"}\NormalTok{) }\SpecialCharTok{+}
+\NormalTok{  our\_theme }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{axis.text.x =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{angle =} \DecValTok{90}\NormalTok{, }\AttributeTok{vjust =} \FloatTok{0.5}\NormalTok{, }\AttributeTok{hjust=}\DecValTok{1}\NormalTok{))}
+  
+\FunctionTok{print}\NormalTok{(US.Germany.RDD.plot)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## `geom_smooth()` using formula = 'y ~ x'
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: Removed 1 rows containing non-finite values (`stat_smooth()`).
+\end{verbatim}
+
+\begin{verbatim}
+## `geom_smooth()` using formula = 'y ~ x'
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: Removed 1 rows containing non-finite values (`stat_smooth()`).
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: Removed 2 rows containing missing values (`geom_line()`).
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: Removed 2 rows containing missing values (`geom_point()`).
+\end{verbatim}
+
+\begin{figure}
+\centering
+\includegraphics{Chang_Jenkins_Mullens_ENV872_Final_files/figure-latex/visualizing the US and Germany data together-1.pdf}
+\caption{US and Germany Year over Year RDD Spending 1985 to 2015}
+\end{figure}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# T{-}test \#1) U.S. Public Low{-}Carbon Energy RD\&D Spending: Pre{-}Obama (1985{-}2008) vs. during Obama Administration (2009{-}2015)}
+
+        \CommentTok{\#Alternative hypothesis == YoY change in public spending on lower{-}carbon energy RD\&D is significant during Obama administration}
+
+        \CommentTok{\#Run two{-}sample T{-}test on US RDD "Eras" data to determine if mean YoY change in investment is the same or different before vs. during Obama admin}
+
+\NormalTok{US.Pre.v.Post.Obama.ttest }\OtherTok{\textless{}{-}} \FunctionTok{t.test}\NormalTok{(RDD.US.Eras}\SpecialCharTok{$}\NormalTok{Percent.Change }\SpecialCharTok{\textasciitilde{}} 
+\NormalTok{                                      RDD.US.Eras}\SpecialCharTok{$}\NormalTok{Era)}
+
+\NormalTok{US.Pre.v.Post.Obama.ttest}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Welch Two Sample t-test
+## 
+## data:  RDD.US.Eras$Percent.Change by RDD.US.Eras$Era
+## t = 0.58747, df = 6.3612, p-value = 0.5771
+## alternative hypothesis: true difference in means between group Obama and group Pre is not equal to 0
+## 95 percent confidence interval:
+##  -23.01113  37.81629
+## sample estimates:
+## mean in group Obama   mean in group Pre 
+##           8.1695963           0.7670191
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+         \CommentTok{\#The p{-}value is 0.5771 which is greater than 0.05 so we must accept our null hypothesis. Therefore, mean year{-}over{-}year change in public low{-}carbon RD\&D spending during the Obama presidency (2009{-}2015) was not statistically distinct from the Pre{-}Obama era (1985{-}2008) YoY spending change.}
+
+\CommentTok{\#{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}}
+  
+\CommentTok{\# T{-}test \#2) Pre{-}Obama Public Low{-}Carbon RD\&D Spending (1985{-}2008): U.S. vs Germany }
+
+         \CommentTok{\#Alternative hypothesis == Prior to Obama\textquotesingle{}s inauguration (in the period spanning 1985{-}2008), the mean YoY change in public low{-}carbon RDD spending in the United States is not statistically distinct from Germany\textquotesingle{}s mean YoY change in public spending   }
+    
+          \DocumentationTok{\#\#\^{} this hypothesis would mean that our null hypothesis is: prior to obama admin, the mean YoY change in public low{-}carbon RDD spending in the United States IS statistically distinct from germany  }
+
+\NormalTok{Pre.}\FloatTok{2009.}\NormalTok{US.Germany.RDD }\OtherTok{\textless{}{-}} \FunctionTok{filter}\NormalTok{(US.and.Germany.RDD, Year }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\DecValTok{1985}\SpecialCharTok{:}\DecValTok{2008}\NormalTok{))}
+  
+\NormalTok{Pre.}\FloatTok{2009.}\NormalTok{US.Germany.ttest }\OtherTok{\textless{}{-}} \FunctionTok{t.test}\NormalTok{(Pre.}\FloatTok{2009.}\NormalTok{US.Germany.RDD}\SpecialCharTok{$}\NormalTok{Percent.Change }\SpecialCharTok{\textasciitilde{}} 
+\NormalTok{                                      Pre.}\FloatTok{2009.}\NormalTok{US.Germany.RDD}\SpecialCharTok{$}\NormalTok{Country)}
+
+\NormalTok{Pre.}\FloatTok{2009.}\NormalTok{US.Germany.ttest}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Welch Two Sample t-test
+## 
+## data:  Pre.2009.US.Germany.RDD$Percent.Change by Pre.2009.US.Germany.RDD$Country
+## t = -0.66411, df = 32.7, p-value = 0.5113
+## alternative hypothesis: true difference in means between group Germany and group US is not equal to 0
+## 95 percent confidence interval:
+##  -12.743123   6.472836
+## sample estimates:
+## mean in group Germany      mean in group US 
+##            -2.3681247             0.7670191
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+      \CommentTok{\#The p{-}value is 0.5113 which is greater than 0.05 so we must accept our null hypothesis. Therefore, in the period prior to Obama\textquotesingle{}s presidency (1985{-}2008), the mean year{-}over{-}year change in public low{-}carbon RD\&D spending in the U.S. was statistically distinct from Germany.}
+    
+      \CommentTok{\#NOTES FROM GOOGLE RE: NULL: If the p{-}value is below your threshold of significance (typically p \textless{} 0.05), then you can reject the null hypothesis, but this does not necessarily mean that your alternative hypothesis is true.}
+
+\CommentTok{\#{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}}
+  
+\CommentTok{\# T{-}test \#3) Obama{-}era Public Low{-}carbon RD\&D Spending (2009{-}2015): United States vs. Germany}
+
+            \DocumentationTok{\#\#Alternative Hypothesis == during the Obama presidency (2009{-}2015), the mean YoY change in public low{-}carbon RDD spending in the United States was statistically distinct from the mean YoY change in Germany }
+
+\NormalTok{Post.}\FloatTok{2009.}\NormalTok{US.Germany.RDD }\OtherTok{\textless{}{-}} \FunctionTok{filter}\NormalTok{(US.and.Germany.RDD, Year }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\DecValTok{2009}\SpecialCharTok{:}\DecValTok{2015}\NormalTok{))}
+  
+\NormalTok{Post.}\FloatTok{2009.}\NormalTok{US.Germany.ttest }\OtherTok{\textless{}{-}} \FunctionTok{t.test}\NormalTok{(Post.}\FloatTok{2009.}\NormalTok{US.Germany.RDD}\SpecialCharTok{$}\NormalTok{Percent.Change }\SpecialCharTok{\textasciitilde{}} 
+\NormalTok{                                      Post.}\FloatTok{2009.}\NormalTok{US.Germany.RDD}\SpecialCharTok{$}\NormalTok{Country)}
+
+\NormalTok{Post.}\FloatTok{2009.}\NormalTok{US.Germany.ttest}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Welch Two Sample t-test
+## 
+## data:  Post.2009.US.Germany.RDD$Percent.Change by Post.2009.US.Germany.RDD$Country
+## t = -0.18605, df = 8.0331, p-value = 0.857
+## alternative hypothesis: true difference in means between group Germany and group US is not equal to 0
+## 95 percent confidence interval:
+##  -33.51499  28.50738
+## sample estimates:
+## mean in group Germany      mean in group US 
+##              5.665790              8.169596
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+          \CommentTok{\#The p{-}value is 0.857 which is greater than 0.05 so the null hypothesis is accepted. Therefore, Obama{-}era (2009{-}2015) mean year{-}over{-}year change in public low{-}carbon RD\&D spending in the U.S. was not statistically distinct from Germany.}
+\end{Highlighting}
+\end{Shaded}
 
 \newpage
 

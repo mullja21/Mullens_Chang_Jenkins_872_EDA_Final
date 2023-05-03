@@ -1,18 +1,23 @@
 ---
-output: 
+title: "Insert title of project here"
+author: "Irene Chang, Susanna Jenkins, and Jordan Mullens"
+output:
+  html_document:
+    df_print: paged
   pdf_document:
     keep_tex: yes
     fig_caption: yes
     number_sections: yes
+subtitle: https://github.com/mullja21/Mullens_Chang_Jenkins_872_EDA_Final.git
 geometry: margin=2.54cm
-title: "Insert title of project here"
-subtitle: "https://github.com/mullja21/Mullens_Chang_Jenkins_872_EDA_Final.git"
-author: "Irene Chang, Susanna Jenkins, and Jordan Mullens"
 fontsize: 12pt
 mainfont: Times New Roman
-
+editor_options:
+  markdown:
+    wrap: 72
 ---
 
+```{=tex}
 \newpage
 \tableofcontents 
 \newpage
@@ -20,7 +25,7 @@ mainfont: Times New Roman
 \newpage
 \listoffigures 
 \newpage
-
+```
 ```{r setup, include=FALSE}
 # Set your working directory
 getwd()
@@ -44,10 +49,10 @@ our_theme <- theme_base() +
       color= 'black',
       linewidth = 2),
     legend.background = element_rect(
-      color = "lightgrey",
-      fill = "lightgrey"),
+      color = "ivory2",
+      fill = "ivory2"),
     legend.title = element_text (
-      color = "blue"))
+      color = "navy"))
 theme_set(our_theme)
 
 
@@ -56,45 +61,43 @@ RDD.raw <- read.csv("./Raw_Data/Public_RDD_Spending_All_Countries.csv")
 
 ```
 
-
 # Rationale and Research Questions
-Question 1: Was the year-over-year change in public investment in lower-carbon energy RD&D significant during 
-the Obama administration?
 
+Question 1: Was the year-over-year change in public investment in
+lower-carbon energy RD&D significant during the Obama administration?
 
 \newpage
 
 # Dataset Information
-The dataset utilized in this analysis was downloaded from International Energy 
-Agency. The IEA's Energy Technology RD&D (Research, Development, & Demonstration) 
-Budgets database provides spending information by energy technology in IEA 
-countries from 1974 to 2022. Data is collected from central or federal government 
-budgets and state-owned companies. Spending categories encompass renewables, 
-nuclear power, fossil fuels, hydrogen, fuel cells, and energy efficiency.
 
+The dataset utilized in this analysis was downloaded from International
+Energy Agency. The IEA's Energy Technology RD&D (Research, Development,
+& Demonstration) Budgets database provides spending information by
+energy technology in IEA countries from 1974 to 2022. Data is collected
+from central or federal government budgets and state-owned companies.
+Spending categories encompass renewables, nuclear power, fossil fuels,
+hydrogen, fuel cells, and energy efficiency.
 
 \newpage
 
-# Exploration of Raw Data 
-
-```{r dataset info}
-#checking the original data set dimensions before wrangling. View dimensions, column names, variable type, and head of each column.
-
-dim(RDD.raw)
-summary(RDD.raw)
-
-
-```
-
 # Data Wrangling
-Downloaded the Energy Technology RD&D (Research, Development, & Demonstration) Budgets. After importing the data to GitHub and Rstudio, the raw dataset was wrangled to suit our analysis. A new data frame was created by extracting the desired years (1985-2015), currency (USD 2021 prices and exchange rates), and economic indications (Total, Fossil Fuels, and Unallocated) for each country. A variable for year-over-year percentage (YoY) difference was created to normalize all comparisons. 
+
+Downloaded the Energy Technology RD&D (Research, Development, &
+Demonstration) Budgets. After importing the data to GitHub and Rstudio,
+the raw dataset was wrangled to suit our analysis. A new data frame was
+created by extracting the desired years (1985-2015), currency (USD 2021
+prices and exchange rates), and economic indications (Total, Fossil
+Fuels, and Unallocated) for each country. A variable for year-over-year
+percentage (YoY) difference was created to normalize all comparisons.
 
 ```{r dataset wrangling}
 #create new data frame, change column names
 RDD.newcolnames <- RDD.raw %>%
   row_to_names(row_number = 1)
 
-#The column names were imported improperly. The first row contains the correct column names, so we used the janitor package since they have a function that will replace the column names with the first row.
+#The column names were imported improperly. The first row contains the correct 
+#column names, so we used the janitor package since they have a function that 
+#will replace the column names with the first row.
 
 
 RDD.countries <-
@@ -110,7 +113,8 @@ RDD.final <- RDD.countries %>%
 
 RDD.transpose <- data.frame(t(RDD.final))
 
-#In our final data frame, we want each year to have its own row; however, in the original dataset, each year was a column. We transposed it.
+#In our final data frame, we want each year to have its own row; however, 
+#in the original dataset, each year was a column. We transposed it.
 
 colnames(RDD.transpose) <- c("Germany.FossilFuels", "Germany.Unallocated", "Germany.TotalBudget", "US.FossilFuels", "US.Unallocated", "US.TotalBudget")
 
@@ -125,7 +129,7 @@ RDD.US <- data.frame(Year=c("1985", "1986", "1987", "1988", "1989", "1990", "199
                      Fossil.Fuel= RDD.transpose.rows$US.FossilFuels,
                      Unallocated= RDD.transpose.rows$US.Unallocated,
                      Total.Budget= RDD.transpose.rows$US.TotalBudget) %>%
-  mutate(Low.Carbon.Energy = Total.Budget-Fossil.Fuel-Unallocated) %>%
+  mutate(Low.Carbon.Energy = c(Total.Budget-Fossil.Fuel-Unallocated)) %>%
   mutate(Percent.Change = ((Low.Carbon.Energy -
                               lag(Low.Carbon.Energy))/lag(Low.Carbon.Energy))*100) %>%
   mutate(Country = "US")
@@ -140,10 +144,12 @@ RDD.Germany <- data.frame(Year=c("1985", "1986", "1987", "1988", "1989", "1990",
   mutate(Percent.Change = ((Low.Carbon.Energy -
                               lag(Low.Carbon.Energy))/lag(Low.Carbon.Energy))*100) %>%
   mutate(Country = "Germany")
+
 ```
 
 ```{r cleaning up data set for analysis}
-#Adding date column to US data frame and transforming it into date object. Also adding a column to denote pre or Obama era for graphing.
+#Adding date column to US data frame and transforming it into date object. Also 
+#adding a column to denote pre or Obama era for graphing.
 RDD.US.Eras <- RDD.US %>%
   mutate(Date = ymd(paste0(RDD.US$Year, "-01-01"))) %>%
   mutate(Era = ifelse(Year <= 2008, "Pre", "Obama"))
@@ -151,15 +157,14 @@ RDD.US.Eras <- RDD.US %>%
 #creating one data frame for US and Germany data
 US.and.Germany.RDD <- rbind(RDD.Germany, RDD.US)
 
-#Adding Date column to US and Germany dataframe. Formatting so that column is transformed to date class
+#Adding Date column to US and Germany dataframe. Formatting so that column is 
+#transformed to date class
 
 US.and.Germany.RDD <- US.and.Germany.RDD %>%
   mutate(Date = ymd(paste0(US.and.Germany.RDD$Year, "-01-01"))) %>%
   mutate(Era = ifelse(Year <= 2008, "Pre", "Obama"))
 
 ```
-
-
 
 ```{r saving processed data}
 #file for Us and Germany
@@ -170,13 +175,130 @@ write.csv(RDD.US.Eras, row.names = FALSE, file = "./Processed_Data/US.Eras.RDD.c
 
 ```
 
+\newpage
+
+# Exploratory Analysis
+
+
+```{r}
+# Create the combined bar plot
+RDD.US.Eras.Bar.plot <- ggplot(RDD.US.Eras, aes(x = Year)) +
+      geom_bar(aes(y = Total.Budget, fill = "Total.budget"), stat= "identity", position = "identity") +
+  geom_bar(aes(y = Low.Carbon.Energy, fill = "Low.Carbon"), stat= "identity", position = "identity") +
+  geom_bar(aes(y = Fossil.Fuel, fill = "Fossil.Fuels"), stat= "identity", position = "identity") +
+  scale_fill_manual(values = c("Fossil.Fuels" = "midnightblue", "Low.Carbon" = "darkolivegreen3", "Total.budget" = "sienna3")) +
+  labs(fill = "Budget Portion")+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+  labs(title = "Proportion of RDD Spending",
+       y="Amount in USD (2021 \n Pricess and Exchange Rates)",
+       x="Year")
+print(RDD.US.Eras.Bar.plot)
+
+
+
+
+#US Line Plot
+RDD.US.Eras.Line.plot <- ggplot(RDD.US.Eras, aes(x = Date)) +
+  geom_line(aes(y = Total.Budget, color= "Total.budget")) +
+  geom_line(aes(y = Fossil.Fuel, color= "Fossil.Fuels")) +
+  geom_line(aes(y = Low.Carbon.Energy, color= "Low.Carbon")) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+  scale_color_manual(name = "Proportion of \n RDD Spending", values= c(
+    "Fossil.Fuels" = "midnightblue", 
+    "Low.Carbon" = "darkolivegreen3", 
+    "Total.budget" = "sienna3")) +
+  scale_x_date(date_breaks = "3 years", date_labels = "%Y") +
+  labs(title = "Proportion of \n United States RDD \n Spending 1985-2015",
+       y="Amount in USD (2021 \n Pricess and Exchange Rates)",
+       x="Year",
+       color= "Legend Title")
+
+print(RDD.US.Eras.Line.plot)
+
+
+
+# Germ and US Line Plot
+US.Germ.total.plot <- ggplot(US.and.Germany.RDD,
+                              aes(x = Date,
+                                  y = Total.Budget, 
+                                  color = Country)) + 
+  geom_line(size= 0.9) +
+  ylim(0, 12500) +
+  scale_color_manual(values = c("tomato3", "darkblue")) +
+  labs(title = "Total RDD Spending 1985-2015",
+       y="Amount in USD (2021 \n Pricess and Exchange Rates)",
+       x="Year",
+       color= "Legend Title")
+
+print(US.Germ.total.plot)
+
+
+#Fossil Fuel Germ and US Line Plot
+US.Germ.fossil.plot <- ggplot(US.and.Germany.RDD,
+                              aes(x = Date,
+                                  y = Fossil.Fuel, 
+                                  color = Country)) + 
+  geom_line(size= 0.9) +
+  ylim(0, 12500) +
+  scale_color_manual(values = c("tomato3", "darkblue")) +
+  labs(title = "Fossil Fuel RDD Spending 1985-2015",
+       y="Amount in USD (2021 \n Pricess and Exchange Rates)",
+       x="Year",
+       color= "Legend Title")
+
+print(US.Germ.fossil.plot)
+
+#Low Carbon Germ and US Line Plot
+US.Germ.lowC.plot <- ggplot(US.and.Germany.RDD,
+                              aes(x = Date,
+                                  y = Low.Carbon.Energy, 
+                                  color = Country)) + 
+  geom_line(size= 0.9) +
+  ylim(0, 12500) +
+  scale_color_manual(values = c("tomato3", "darkblue")) +
+  labs(title = "Low Carbon RDD Spending 1985-2015",
+       y="Amount in USD (2021 \n Pricess and Exchange Rates)",
+       x="Year",
+       color= "Legend Title")
+
+print(US.Germ.lowC.plot)
+
+
+
+#Creating a cowplot
+library(cowplot)
+
+legend_cow <- get_legend(
+  US.Germ.lowC.plot + 
+  guides(color = guide_legend(nrow = 1)) +
+  theme(legend.position = "right"))
+
+
+#Constructing the cowplot. NEED HELP FORMATTING SO THAT GRAPHS ARE VERTICAL
+US.Germ.cowplot <- plot_grid(
+  US.Germ.total.plot + theme(legend.position="none"),
+  US.Germ.fossil.plot + theme(legend.position="none"),
+  US.Germ.lowC.plot + theme(legend.position="none"),
+  align = "hv",
+  legend_cow
+  )
+print(US.Germ.cowplot)
+
+
+```
 
 \newpage
 
 # Analysis
-Our analysis of this dataset focuses on comparing the mean investment YoY difference of the Pre-Obama era and the mean investment YoY difference of the Obama era. However, we need to ensure any changes in investment is unique to the Obama administration and not occurring globally. Therefore, we will also utilize t-tests to compare US investments to Germany's within the same time period.
 
-```{r visualizing the US data}
+Our analysis of this dataset focuses on comparing the mean investment
+YoY difference of the Pre-Obama era and the mean investment YoY
+difference of the Obama era. However, we need to ensure any changes in
+investment is unique to the Obama administration and not occurring
+globally. Therefore, we will also utilize t-tests to compare US
+investments to Germany's within the same time period.
+
+```{r visualizing the US data, fig.cap= "US Year over Year RDD Spending 1985 to 2015"}
 #plotting the pre-Obama data
 RDD.US.Eras.plot <- RDD.US.Eras %>%
   ggplot(
@@ -185,9 +307,9 @@ RDD.US.Eras.plot <- RDD.US.Eras %>%
              color= Era)) + 
   geom_line() +
   geom_point() +
-  geom_smooth(data = subset(RDD.US.Eras, Era == "Pre"), method = "lm", se=FALSE, color= "darkolivegreen3") +
+  geom_smooth(data = subset(RDD.US.Eras, Era == "Pre"), method = "lm", se=FALSE, color= "darkolivegreen4") +
   geom_smooth(data = subset(RDD.US.Eras, Era == "Obama"), method = "lm", se=FALSE, color= "dodgerblue3") +
-  labs(title = "Year-over-Year Percent Change in Public \n Low-Carbon Energy RD&D Spending: U.S.",
+  labs(title = "Year-over-Year Percent Change in Public \n Low-Carbon Energy RD&D \n Spending: U.S.",
        y="YoY Percent Change",
        x="Year") + 
   scale_color_manual(values = c("darkblue", "darkgreen")) +
@@ -199,10 +321,7 @@ print(RDD.US.Eras.plot)
 
 ```
 
-
-
-
-```{r visualizing the US and Germany data together}
+```{r visualizing the US and Germany data together, fig.cap= "US and Germany Year over Year RDD Spending 1985 to 2015"}
 #plotting the data
 US.Germany.RDD.plot <- ggplot(US.and.Germany.RDD,
                               aes(x = Date,
@@ -213,7 +332,7 @@ US.Germany.RDD.plot <- ggplot(US.and.Germany.RDD,
   geom_smooth(data = subset(US.and.Germany.RDD, Country == "Germany"), method = "lm", se=FALSE, color= "tomato2") +
   geom_smooth(data = subset(RDD.US.Eras, Country == "US"), method = "lm", se=FALSE, color= "dodgerblue3") +
   scale_color_manual(values = c("tomato3", "darkblue")) +
-  labs(title = "YoY Change in Public Low-Carbon \n Energy RD&D Spending: US vs. Germany",
+  labs(title = "YoY Change in Public Low-Carbon \n Energy RD&D Spending: \n US vs. Germany",
        y="Year-over-Year Percent Change",
        x="Year") + 
   scale_x_date(date_breaks = "2 years", date_labels = "%Y") +
@@ -223,10 +342,6 @@ US.Germany.RDD.plot <- ggplot(US.and.Germany.RDD,
 print(US.Germany.RDD.plot)
 
 ```
-
-
-
-
 
 ```{r conducting 3 ttests}
 
@@ -279,14 +394,12 @@ Post.2009.US.Germany.ttest
 
 ```
 
-
-
 \newpage
 
 # Summary and Conclusions
 
-
 \newpage
 
 # References
-<add references here if relevant, otherwise delete this section> 
+
+\<add references here if relevant, otherwise delete this section\>
